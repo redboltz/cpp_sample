@@ -3,8 +3,11 @@
 #include <boost/optional.hpp>
 #include <iostream>
 
+//using std::tr1::unordered_map;
+using std::unordered_map;
+
 int main() {
-    std::tr1::unordered_map<std::string, boost::optional<int> > a;
+    unordered_map<std::string, boost::optional<int> > a;
     a["hoge"] = 10;
     a["fuga"] = boost::none;
     if (a.find("pnyo") == a.end()) {
@@ -51,7 +54,7 @@ int main() {
     }
 
     // 効率的なチェック、アクセス
-    std::tr1::unordered_map<std::string, boost::optional<int> >::iterator i(a.find("hoge"));
+    unordered_map<std::string, boost::optional<int> >::iterator i(a.find("hoge"));
     if (i != a.end()) {
         std::cout << *i->second << std::endl;
         *i->second = 42;
