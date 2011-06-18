@@ -1,0 +1,11 @@
+window_sizes 1800 1050 450 1350 800 76
+diagrams
+  active  statediagram_ref 134530 // Simple
+    1071 720 100 4 0 0
+end
+show_stereotypes
+selected state_ref 134786 // 01_Simple
+open
+  state_ref 134786 // 01_Simple
+end
+end

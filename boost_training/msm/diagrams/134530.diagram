@@ -1,0 +1,23 @@
+format 76
+
+pseudostatecanvas 128002 pseudostate_ref 134914 // initial
+   xyz 128 27 2000
+end
+statecanvas 128130 state_ref 134914 // State1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 36 76 2000 203 65
+end
+pseudostatecanvas 128258 pseudostate_ref 135042 // final
+   xyz 126 179 2000
+end
+transitioncanvas 128386 transition_ref 135042 // <transition>
+  
+  from ref 128002 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128514 transition_ref 135170 // Event1
+  
+  from ref 128130 z 2001 label "Event1" xyz 100.5 153 2001 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+end

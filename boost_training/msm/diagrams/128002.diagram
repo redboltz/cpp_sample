@@ -1,0 +1,44 @@
+format 76
+
+pseudostatecanvas 128002 pseudostate_ref 128002 // initial
+   xyz 118 19 2000
+end
+statecanvas 128130 state_ref 128130 // S1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 23 83 2000 233 169
+end
+pseudostatecanvas 128386 pseudostate_ref 128130 // exit_point
+   xyz 119 238 3005 label_xy 94 258
+end
+pseudostatecanvas 128514 pseudostate_ref 128258 // entry_point
+   xyz 118 74 3005 label_xy 85 65
+end
+statecanvas 128770 state_ref 128258 // Sub1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 47 128 2005 163 65
+end
+pseudostatecanvas 129154 pseudostate_ref 128386 // final
+   xyz 116 296 2000
+end
+transitioncanvas 128642 transition_ref 128130 // <transition>
+  
+  from ref 128002 z 3006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128898 transition_ref 128258 // <transition>
+  decenter_begin 526
+  
+  from ref 128514 z 3006 to ref 128770
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129026 transition_ref 128386 // E1
+  
+  from ref 128770 z 3006 label "E1" xyz 122 208.5 3000 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129282 transition_ref 128514 // <transition>
+  
+  from ref 128386 z 3006 to ref 129154
+  write_horizontally default show_definition default drawing_language default
+end
+end
