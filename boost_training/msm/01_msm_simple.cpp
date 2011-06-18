@@ -4,11 +4,10 @@
 #include <boost/msm/front/state_machine_def.hpp>
 #include <boost/msm/front/functor_row.hpp>
 
-namespace msm = boost::msm;
-namespace mpl = boost::mpl;
-using namespace msm::front;
 
 namespace {
+	namespace msm = boost::msm;
+	namespace mpl = boost::mpl;
 	using namespace msm::front;
 
 	// ----- Events

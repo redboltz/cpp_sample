@@ -1,11 +1,14 @@
 window_sizes 1800 1050 450 1350 800 76
 diagrams
-  active  statediagram_ref 134530 // Simple
+  statediagram_ref 134530 // Simple
+    1071 720 100 4 0 0
+  active  statediagram_ref 141186 // InitAction
     1071 720 100 4 0 0
 end
 show_stereotypes
-selected state_ref 134786 // 01_Simple
+selected statediagram_ref 141186 // InitAction
 open
   state_ref 134786 // 01_Simple
+  state_ref 141442 // 02_InitAction
 end
 end

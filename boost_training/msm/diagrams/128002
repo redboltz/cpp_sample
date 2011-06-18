@@ -1,6 +1,6 @@
 format 76
 "test" // test
-  revision 3
+  revision 5
   modified_by 2 "kondo"
   // class settings
   //class diagram settings
@@ -53,7 +53,7 @@ format 76
       end
 
       pseudostate 134914 initial 
-	transition 135042 "<transition>"
+	transition 141698 "<transition>"
 	  on state_ref 134914 // State1
 	  external 
 	end
@@ -69,6 +69,35 @@ format 76
       end
 
       pseudostate 135042 final 
+      end
+    end
+
+    state 141442 "02_InitAction"
+      stereotype "machine"
+      comment "aaa"
+      statediagram 141186 "InitAction"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 141570 initial 
+	transition 141826 "/InitAction"
+	  on state_ref 147970 // State1
+	  external 
+	end
+      end
+
+      pseudostate 141698 final 
+      end
+
+      state 147970 "State1"
+	  uml_on_entry "\"Staet1::on_entry()\""
+	  uml_on_exit "\"Staet1::on_exit()\""
+	transition 141954 "Event1"
+	  on pseudostate_ref 141698 // final
+	  external 
+	end
       end
     end
   end

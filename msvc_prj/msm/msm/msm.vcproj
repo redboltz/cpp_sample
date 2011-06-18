@@ -172,7 +172,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\boost_training\msm\01_msm_simple.cpp"
+				RelativePath="..\..\..\boost_training\msm\02_msm_init_action.cpp"
 				>
 			</File>
 		</Filter>
