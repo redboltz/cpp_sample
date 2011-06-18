@@ -2,13 +2,15 @@ window_sizes 1800 1050 450 1350 800 76
 diagrams
   statediagram_ref 134530 // Simple
     1071 720 100 4 0 0
-  active  statediagram_ref 141186 // InitAction
+  statediagram_ref 141186 // InitAction
+    1071 720 100 4 0 0
+  active  statediagram_ref 147714 // WhyIsInitActionNeeded
     1071 720 100 4 0 0
 end
 show_stereotypes
-selected statediagram_ref 141186 // InitAction
+selected 
+  package_ref 129 // smd
 open
-  state_ref 134786 // 01_Simple
-  state_ref 141442 // 02_InitAction
+  state_ref 154626 // State2
 end
 end

@@ -1,6 +1,6 @@
 format 76
 "test" // test
-  revision 5
+  revision 7
   modified_by 2 "kondo"
   // class settings
   //class diagram settings
@@ -96,6 +96,56 @@ format 76
 	  uml_on_exit "\"Staet1::on_exit()\""
 	transition 141954 "Event1"
 	  on pseudostate_ref 141698 // final
+	  external 
+	end
+      end
+    end
+
+    state 154498 "02_1_WhyIsInitActionNeeded"
+      stereotype "machine"
+      comment "aaa"
+      statediagram 147714 "WhyIsInitActionNeeded"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 148226 initial 
+      end
+
+      state 154626 "State2"
+	  uml_on_entry "\"State2::on_entry()\""
+	  uml_on_exit "\"State2::on_exit()\""
+	pseudostate 148354 initial 
+	  transition 148482 "/InitAction"
+	    on state_ref 155010 // State2_1
+	    external 
+	  end
+	end
+
+	state 155010 "State2_1"
+	    uml_on_entry "\"State2_1::on_entry()\""
+	    uml_on_exit "\"State2_1::on_exit()\""
+	end
+      end
+
+      state 154754 "State1"
+	  uml_on_entry "\"State1::on_entry()\""
+	  uml_on_exit "\"State1::on_exit()\""
+	transition 148610 "Event1"
+	  on state_ref 154626 // State2
+	  external 
+	end
+
+	transition 148738 "Event2"
+	  on state_ref 155010 // State2_1
+	  external 
+	end
+      end
+
+      pseudostate 148482 initial 
+	transition 148866 "<transition>"
+	  on state_ref 154754 // State1
 	  external 
 	end
       end

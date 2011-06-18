@@ -1,0 +1,42 @@
+format 76
+
+statecanvas 128130 state_ref 154626 // State2
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 29 32 2000 241 225
+end
+statecanvas 128258 state_ref 154754 // State1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 321 112 2000 203 65
+end
+pseudostatecanvas 128514 pseudostate_ref 148354 // initial
+   xyz 140 92 2005
+end
+statecanvas 128642 state_ref 155010 // State2_1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 41 172 2010 215 65
+end
+pseudostatecanvas 129410 pseudostate_ref 148482 // initial
+   xyz 414 68 2000
+end
+transitioncanvas 128770 transition_ref 148482 // /InitAction
+  
+  from ref 128514 z 2011 label "/InitAction" xyz 89 128.5 2011 to ref 128642
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128898 transition_ref 148610 // Event1
+  
+  from ref 128258 z 2001 label "Event1" xyz 276.5 129 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129026 transition_ref 148738 // Event2
+  
+  from ref 128258 z 2011 label "Event2" xyz 376 188 2011 to point 420 202
+  line 129666 z 2011 to ref 128642
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129538 transition_ref 148866 // <transition>
+  
+  from ref 129410 z 2001 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+end
