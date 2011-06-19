@@ -1,0 +1,23 @@
+format 76
+
+pseudostatecanvas 128002 pseudostate_ref 155010 // initial
+   xyz 155 49 2000
+end
+statecanvas 128130 state_ref 161666 // State1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 62 114 2000 203 65
+end
+transitioncanvas 128258 transition_ref 155394 // /InitAction
+  
+  from ref 128002 z 2001 label "/InitAction" xyz 103 80 3000 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128770 transition_ref 155650 // Event1
+  
+  from ref 128130 z 2001 label "Event1" xyz 22 130 3000 to point 31 144
+  line 128898 z 2001 to point 32 224
+  line 129026 z 2001 to point 161 224
+  line 129282 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+end

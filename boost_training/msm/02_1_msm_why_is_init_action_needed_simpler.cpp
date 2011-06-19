@@ -17,6 +17,7 @@ namespace {
     struct Sm1_:public msm::front::state_machine_def<Sm1_>
     {
         // States
+		struct Init:msm::front::state<> {};
         struct State1:msm::front::state<> 
         {
             // Entry action
@@ -30,15 +31,24 @@ namespace {
 				std::cout << "State1::on_exit()" << std::endl;
 			}
         };
-		struct End:msm::front::terminate_state<> {};
 
         // Set initial state
-        typedef State1 initial_state;
+        typedef Init initial_state;
+
+		// Actions
+		struct InitAction {
+            template <class EVT, class FSM, class SourceState, class TargetState>
+            void operator()(EVT const&, FSM&, SourceState&, TargetState&)
+            {
+                std::cout << "InitAction()" << std::endl;
+            }
+		};
 
         // Transition table
         struct transition_table:mpl::vector<
-            //    Start		Event	Next	Action	Guard
-            Row < State1,	Event1,	End,	none,	none >
+            //    Start		Event	Next	Action		Guard
+            Row < Init,		none,	State1,	InitAction,	none >,
+            Row < State1,	Event1,	State1,	none,		none >
         > {};
     };
 
@@ -62,6 +72,8 @@ int main()
 
 // Output:
 //
+// InitAction()
 // State1::on_entry()
 // > Send Event1
 // State1::on_exit()
+// State1::on_entry()

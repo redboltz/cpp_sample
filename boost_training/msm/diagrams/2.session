@@ -1,16 +1,14 @@
-window_sizes 1800 1050 450 1350 800 76
+window_sizes 647 1036 288 771 800 76
 diagrams
-  statediagram_ref 134530 // Simple
-    1071 720 100 4 0 0
-  statediagram_ref 141186 // InitAction
-    1071 720 100 4 0 0
-  active  statediagram_ref 147714 // WhyIsInitActionNeeded
-    1071 720 100 4 0 0
+  statediagram_ref 147714 // WhyIsInitActionNeeded
+    741 709 100 4 0 0
+  active  statediagram_ref 154242 // WhyIsInitActionNeededSimpler
+    353 887 100 4 0 0
 end
 show_stereotypes
-selected 
-  package_ref 129 // smd
+selected statediagram_ref 154242 // WhyIsInitActionNeededSimpler
 open
-  state_ref 154626 // State2
+  pseudostate_ref 155010 // initial
+  state_ref 161666 // State1
 end
 end

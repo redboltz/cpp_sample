@@ -60,6 +60,7 @@ namespace {
     {        
         Sm1 sm1;
         sm1.start(); 
+		std::cout << "> Send Event1" << std::endl;
 		sm1.process_event(Event1());
     }
 }
@@ -74,4 +75,5 @@ int main()
 //
 // InitAction()
 // State1::on_entry()
+// > Send Event1
 // State1::on_exit()

@@ -100,6 +100,7 @@ namespace {
 		std::cout << "=== test1 start" << std::endl;
 		Sm1 sm1;
 		sm1.start(); 
+		std::cout << "> Send Event1" << std::endl;
 		sm1.process_event(Event1());
 		std::cout << "=== test1 end" << std::endl;
 	}
@@ -108,6 +109,7 @@ namespace {
 		std::cout << "=== test2 start" << std::endl;
 		Sm1 sm1;
 		sm1.start(); 
+		std::cout << "> Send Event2" << std::endl;
 		sm1.process_event(Event2());
 		std::cout << "=== test2 end" << std::endl;
 	}
@@ -124,6 +126,7 @@ int main()
 //
 // === test1 start
 // State1::on_entry()
+// > Send Event1
 // State1::on_exit()
 // State2::on_entry()
 // InitAction()
@@ -131,6 +134,7 @@ int main()
 // === test1 end
 // === test2 start
 // State1::on_entry()
+// > Send Event2
 // State1::on_exit()
 // State2::on_entry()
 // State2_1::on_entry()
