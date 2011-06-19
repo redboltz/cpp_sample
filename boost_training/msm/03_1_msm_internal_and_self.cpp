@@ -6,11 +6,11 @@
 
 
 namespace {
-	namespace msm = boost::msm;
-	namespace msmf = boost::msm::front;
-	namespace mpl = boost::mpl;
+    namespace msm = boost::msm;
+    namespace msmf = boost::msm::front;
+    namespace mpl = boost::mpl;
 
-	// ----- Events
+    // ----- Events
     struct Event1 {};
     struct Event2 {};
 
@@ -18,59 +18,59 @@ namespace {
     struct Sm1_:public msm::front::state_machine_def<Sm1_>
     {
         // States
-		struct Init:msm::front::state<> {};
+        struct Init:msm::front::state<> {};
         struct State1:msm::front::state<> 
         {
             // Entry action
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) {
-				std::cout << "State1::on_entry()" << std::endl;
-			}
+                std::cout << "State1::on_entry()" << std::endl;
+            }
             // Exit action
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) {
-				std::cout << "State1::on_exit()" << std::endl;
-			}
+                std::cout << "State1::on_exit()" << std::endl;
+            }
         };
 
         // Set initial state
         typedef Init initial_state;
 
-		// Actions
-		struct Action1 {
+        // Actions
+        struct Action1 {
             template <class Event, class Fsm, class SourceState, class TargetState>
             void operator()(Event const&, Fsm&, SourceState&, TargetState&)
             {
                 std::cout << "Action1()" << std::endl;
             }
-		};
-		struct Action2 {
+        };
+        struct Action2 {
             template <class Event, class Fsm, class SourceState, class TargetState>
             void operator()(Event const&, Fsm&, SourceState&, TargetState&)
             {
                 std::cout << "Action2()" << std::endl;
             }
-		};
+        };
 
         // Transition table
         struct transition_table:mpl::vector<
-            //          Start	Event	Next		Action		Guard
-            msmf::Row < State1,	Event1,	State1,		Action1,	msmf::none >,
-            msmf::Row < State1,	Event2,	msmf::none,	Action2,	msmf::none >
+            //          Start   Event   Next        Action      Guard
+            msmf::Row < State1, Event1, State1,     Action1,    msmf::none >,
+            msmf::Row < State1, Event2, msmf::none, Action2,    msmf::none >
         > {};
     };
 
-	// Pick a back-end
+    // Pick a back-end
     typedef msm::back::state_machine<Sm1_> Sm1;
 
     void test()
     {        
         Sm1 sm1;
         sm1.start(); 
-		std::cout << "> Send Event1" << std::endl;
-		sm1.process_event(Event1());
-		std::cout << "> Send Event2" << std::endl;
-		sm1.process_event(Event2());
+        std::cout << "> Send Event1" << std::endl;
+        sm1.process_event(Event1());
+        std::cout << "> Send Event2" << std::endl;
+        sm1.process_event(Event2());
     }
 }
 

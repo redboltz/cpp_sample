@@ -1,17 +1,21 @@
 window_sizes 1131 1036 288 771 800 76
 diagrams
-  statediagram_ref 147714 // WhyIsInitActionNeeded
-    741 709 100 4 0 0
   statediagram_ref 154242 // WhyIsInitActionNeededSimpler
     353 887 100 4 0 0
-  active  statediagram_ref 160770 // InternalAndSelf
+  statediagram_ref 160770 // InternalAndSelf
     837 887 100 4 0 0
+  statediagram_ref 147714 // WhyIsInitActionNeeded
+    665 709 100 4 0 0
+  statediagram_ref 167298 // CompositeExit
+    665 709 100 4 0 0
+  statediagram_ref 167426 // EntryExitPoint
+    665 709 100 4 0 0
+  active  statediagram_ref 167554 // ParentInternalTransition
+    833 881 100 4 0 0
 end
 show_stereotypes
-selected statediagram_ref 160770 // InternalAndSelf
+selected statediagram_ref 167554 // ParentInternalTransition
 open
-  pseudostate_ref 155010 // initial
-  state_ref 161666 // State1
-  state_ref 168194 // 03_InternalAndSelf
+  state_ref 176002 // State1
 end
 end

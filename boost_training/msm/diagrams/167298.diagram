@@ -1,0 +1,62 @@
+format 76
+
+statecanvas 128002 state_ref 174978 // State1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 32 23 2000 291 285
+end
+statecanvas 128130 state_ref 175106 // State1_1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 63 124 2005 215 93
+end
+pseudostatecanvas 128258 pseudostate_ref 168066 // final
+   xyz 160 242 2005
+end
+pseudostatecanvas 128514 pseudostate_ref 168194 // initial
+   xyz 161 83 2005
+end
+statecanvas 128770 state_ref 175234 // State2
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 386 146 2000 203 91
+end
+pseudostatecanvas 128898 pseudostate_ref 168322 // initial
+   xyz 479 103 2000
+end
+transitioncanvas 128386 transition_ref 169090 // Event3
+  
+  from ref 128130 z 2006 label "Event3" xyz 132 221.5 3000 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128642 transition_ref 169218 // Action1
+  
+  from ref 128514 z 2006 label "Action1" xyz 179 101 3000 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129026 transition_ref 169346 // <transition>
+  
+  from ref 128898 z 2001 to ref 128770
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129154 transition_ref 169474 // Event1
+  decenter_begin 142
+  decenter_end 476
+  
+  from ref 128770 z 2001 label "Event1" xyz 336 143 3000 to ref 128002
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129282 transition_ref 169602 // Event2
+  decenter_begin 570
+  decenter_end 795
+  
+  from ref 128770 z 2006 label "Event2" xyz 336 180 3000 to point 353 195
+  line 129538 z 2006 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129410 transition_ref 169730 // <transition>
+  decenter_begin 690
+  decenter_end 813
+  
+  from ref 128002 z 2001 to point 362 217
+  line 129794 z 2001 to ref 128770
+  write_horizontally default show_definition default drawing_language default
+end
+end

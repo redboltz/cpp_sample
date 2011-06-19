@@ -106,13 +106,13 @@ namespace
         void resume_playback(end_pause const&)      { std::cout << "player::resume_playback\n"; }
         void stop_and_open(open_close const&)  { std::cout << "player::stop_and_open\n"; }
         void stopped_again(stop const&)        {std::cout << "player::stopped_again\n";}
-		struct store_cd_info_fct {
+        struct store_cd_info_fct {
             template <class EVT,class FSM,class SourceState,class TargetState>
             void operator()(EVT const& ,FSM& ,SourceState& ,TargetState& )
             {
                 std::cout << "store_cd_info" << std::endl;
             }
-		};
+        };
         // guard conditions
         bool good_disk_format(cd_detected const& evt) 
         {
@@ -124,18 +124,18 @@ namespace
             }
             return true;
         }
-		struct good_disk_format_fct {
+        struct good_disk_format_fct {
             template <class EVT,class FSM,class SourceState,class TargetState>
             bool operator()(EVT const& evt ,FSM&,SourceState& ,TargetState& ) const
             {
-				if (evt.disc_type != DISK_CD)
-				{
-					std::cout << "wrong disk, sorry" << std::endl;
-					return false;
-				}
-				return true;
-			}
-		};
+                if (evt.disc_type != DISK_CD)
+                {
+                    std::cout << "wrong disk, sorry" << std::endl;
+                    return false;
+                }
+                return true;
+            }
+        };
         // transitions internal to Empty
         void internal_action(cd_detected const&){ std::cout << "Empty::internal action\n"; }
         bool internal_guard(cd_detected const&)
