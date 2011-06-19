@@ -1,0 +1,33 @@
+format 76
+
+pseudostatecanvas 128002 pseudostate_ref 161538 // initial
+   xyz 184 22 2000
+end
+statecanvas 128130 state_ref 168322 // State1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 91 80 2000 203 65
+end
+transitioncanvas 128642 transition_ref 162306 // <transition>
+  
+  from ref 128002 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128770 transition_ref 162434 // Event1/Action1
+  decenter_begin 246
+  decenter_end 722
+  
+  from ref 128130 z 2001 label "Event1/Action1" xyz 10 81 3000 to point 37 93
+  line 128898 z 2001 to point 37 124
+  line 129026 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129154 transition_ref 162562 // Event2/Action2
+  decenter_begin 753
+  decenter_end 261
+  
+  from ref 128130 z 2001 label "Event2/Action2" xyz 301 135 3000 to point 345 126
+  line 129666 z 2001 to point 345 94
+  line 129922 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+end

@@ -1,6 +1,6 @@
 format 76
 "test" // test
-  revision 8
+  revision 9
   modified_by 2 "kondo"
   // class settings
   //class diagram settings
@@ -172,6 +172,40 @@ format 76
 	  uml_on_exit "\"State1::on_exit()\""
 	transition 155650 "Event1"
 	  on state_ref 161666 // State1
+	  external 
+	end
+      end
+    end
+
+    state 168194 "03_InternalAndSelf"
+      stereotype "machine"
+      comment "aaa"
+      statediagram 160770 "InternalAndSelf"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 161538 initial 
+	transition 162306 "<transition>"
+	  on state_ref 168322 // State1
+	  external 
+	end
+      end
+
+      state 168322 "State1"
+	  uml_on_entry "\"State1::on_entry()\""
+	  uml_on_exit "\"State1::on_exit()\""
+	active
+	ncouples 1
+	key "" value ""
+	transition 162434 "Event1/Action1"
+	  on state_ref 168322 // State1
+	  external 
+	end
+
+	transition 162562 "Event2/Action2"
+	  on state_ref 168322 // State1
 	end
       end
     end

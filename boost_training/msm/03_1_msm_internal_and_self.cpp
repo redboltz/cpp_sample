@@ -12,6 +12,7 @@ namespace {
 
 	// ----- Events
     struct Event1 {};
+    struct Event2 {};
 
     // ----- State machine
     struct Sm1_:public msm::front::state_machine_def<Sm1_>
@@ -36,19 +37,26 @@ namespace {
         typedef Init initial_state;
 
 		// Actions
-		struct InitAction {
+		struct Action1 {
             template <class Event, class Fsm, class SourceState, class TargetState>
             void operator()(Event const&, Fsm&, SourceState&, TargetState&)
             {
-                std::cout << "InitAction()" << std::endl;
+                std::cout << "Action1()" << std::endl;
+            }
+		};
+		struct Action2 {
+            template <class Event, class Fsm, class SourceState, class TargetState>
+            void operator()(Event const&, Fsm&, SourceState&, TargetState&)
+            {
+                std::cout << "Action2()" << std::endl;
             }
 		};
 
         // Transition table
         struct transition_table:mpl::vector<
-            //          Start	Event		Next	Action		Guard
-            msmf::Row < Init,	msmf::none,	State1,	InitAction,	msmf::none >,
-            msmf::Row < State1,	Event1,		State1,	msmf::none,	msmf::none >
+            //          Start	Event	Next		Action		Guard
+            msmf::Row < State1,	Event1,	State1,		Action1,	msmf::none >,
+            msmf::Row < State1,	Event2,	msmf::none,	Action2,	msmf::none >
         > {};
     };
 
@@ -61,6 +69,8 @@ namespace {
         sm1.start(); 
 		std::cout << "> Send Event1" << std::endl;
 		sm1.process_event(Event1());
+		std::cout << "> Send Event2" << std::endl;
+		sm1.process_event(Event2());
     }
 }
 
@@ -72,8 +82,10 @@ int main()
 
 // Output:
 //
-// InitAction()
 // State1::on_entry()
 // > Send Event1
 // State1::on_exit()
+// Action1()
 // State1::on_entry()
+// > Send Event2
+// Action2()

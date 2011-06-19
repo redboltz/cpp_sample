@@ -7,8 +7,8 @@
 
 namespace {
 	namespace msm = boost::msm;
+	namespace msmf = boost::msm::front;
 	namespace mpl = boost::mpl;
-	using namespace msm::front;
 
 	// ----- Events
     struct Event1 {};
@@ -21,13 +21,13 @@ namespace {
         struct State1:msm::front::state<> 
         {
             // Entry action
-            template <class Event,class FSM>
-            void on_entry(Event const&, FSM&) {
+            template <class Event,class Fsm>
+            void on_entry(Event const&, Fsm&) {
 				std::cout << "State1::on_entry()" << std::endl;
 			}
             // Exit action
-            template <class Event,class FSM>
-            void on_exit(Event const&, FSM&) {
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) {
 				std::cout << "State1::on_exit()" << std::endl;
 			}
         };
@@ -38,8 +38,8 @@ namespace {
 
 		// Actions
 		struct InitAction {
-            template <class EVT, class FSM, class SourceState, class TargetState>
-            void operator()(EVT const&, FSM&, SourceState&, TargetState&)
+            template <class Event, class Fsm, class SourceState, class TargetState>
+            void operator()(Event const&, Fsm&, SourceState&, TargetState&)
             {
                 std::cout << "InitAction()" << std::endl;
             }
@@ -47,9 +47,9 @@ namespace {
 
         // Transition table
         struct transition_table:mpl::vector<
-            //    Start		Event	Next	Action		Guard
-            Row < Init,		none,	State1,	InitAction,	none >,
-            Row < State1,	Event1,	End,	none,		none >
+            //          Start	Event		Next	Action		Guard
+            msmf::Row < Init,	msmf::none,	State1,	InitAction,	msmf::none >,
+            msmf::Row < State1,	Event1,		End,	msmf::none,	msmf::none >
         > {};
     };
 

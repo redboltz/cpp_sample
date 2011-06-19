@@ -9,13 +9,13 @@ statecanvas 128130 state_ref 161666 // State1
 end
 transitioncanvas 128258 transition_ref 155394 // /InitAction
   
-  from ref 128002 z 2001 label "/InitAction" xyz 103 80 3000 to ref 128130
+  from ref 128002 z 2001 label "/InitAction" xyz 103 80 2001 to ref 128130
   write_horizontally default show_definition default drawing_language default
 end
 transitioncanvas 128770 transition_ref 155650 // Event1
   
-  from ref 128130 z 2001 label "Event1" xyz 22 130 3000 to point 31 144
-  line 128898 z 2001 to point 32 224
+  from ref 128130 z 2001 label "Event1" xyz 22 130 2001 to point 31 144
+  line 128898 z 2001 to point 31 224
   line 129026 z 2001 to point 161 224
   line 129282 z 2001 to ref 128130
   write_horizontally default show_definition default drawing_language default

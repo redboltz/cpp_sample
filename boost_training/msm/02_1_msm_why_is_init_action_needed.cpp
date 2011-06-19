@@ -7,8 +7,8 @@
 
 namespace {
 	namespace msm = boost::msm;
+	namespace msmf = boost::msm::front;
 	namespace mpl = boost::mpl;
-	using namespace msm::front;
 
 	// ----- Events
     struct Event1 {};
@@ -21,13 +21,13 @@ namespace {
         struct State1:msm::front::state<> 
         {
             // Entry action
-            template <class Event,class FSM>
-            void on_entry(Event const&, FSM&) {
+            template <class Event,class Fsm>
+            void on_entry(Event const&, Fsm&) {
 				std::cout << "State1::on_entry()" << std::endl;
 			}
             // Exit action
-            template <class Event,class FSM>
-            void on_exit(Event const&, FSM&) {
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) {
 				std::cout << "State1::on_exit()" << std::endl;
 			}
         };
@@ -35,13 +35,13 @@ namespace {
 		struct State2_:public msm::front::state_machine_def<State2_>
 		{
             // Entry action
-            template <class Event,class FSM>
-            void on_entry(Event const&, FSM&) {
+            template <class Event,class Fsm>
+            void on_entry(Event const&, Fsm&) {
 				std::cout << "State2::on_entry()" << std::endl;
 			}
             // Exit action
-            template <class Event,class FSM>
-            void on_exit(Event const&, FSM&) {
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) {
 				std::cout << "State2::on_exit()" << std::endl;
 			}
 
@@ -50,13 +50,13 @@ namespace {
 			struct State2_1:msm::front::state<>,  public msm::front::explicit_entry<0> 
 			{
 				// Entry action
-				template <class Event,class FSM>
-				void on_entry(Event const&, FSM&) {
+				template <class Event,class Fsm>
+				void on_entry(Event const&, Fsm&) {
 					std::cout << "State2_1::on_entry()" << std::endl;
 				}
 				// Exit action
-				template <class Event,class FSM>
-				void on_exit(Event const&, FSM&) {
+				template <class Event,class Fsm>
+				void on_exit(Event const&, Fsm&) {
 					std::cout << "State2_1::on_exit()" << std::endl;
 				}
 			};
@@ -66,8 +66,8 @@ namespace {
 
 			// Actions
 			struct InitAction {
-				template <class EVT, class FSM, class SourceState, class TargetState>
-				void operator()(EVT const&, FSM&, SourceState&, TargetState&)
+				template <class Event, class Fsm, class SourceState, class TargetState>
+				void operator()(Event const&, Fsm&, SourceState&, TargetState&)
 				{
 					std::cout << "InitAction()" << std::endl;
 				}
@@ -75,8 +75,8 @@ namespace {
 
 			// (Sub) Transition table
 			struct transition_table:mpl::vector<
-				//    Start		Event	Next		Action		Guard
-				Row < Init,		none,	State2_1,	InitAction,	none >
+				//          Start	Event		Next		Action		Guard
+				msmf::Row < Init,	msmf::none,	State2_1,	InitAction,	msmf::none >
 			> {};
 		};
 		// (Sub) Pick a back-end
@@ -86,9 +86,9 @@ namespace {
 		typedef State1 initial_state;
 		// Transition table
 		struct transition_table:mpl::vector<
-			//    Start		Event	Next								Action	Guard
-			Row < State1,	Event1,	State2,								none,	none >,
-			Row < State1,	Event2,	State2::direct<State2_::State2_1>,	none,	none >
+			//          Start	Event	Next								Action		Guard
+			msmf::Row < State1,	Event1,	State2,								msmf::none,	msmf::none >,
+			msmf::Row < State1,	Event2,	State2::direct<State2_::State2_1>,	msmf::none,	msmf::none >
 		> {};
 	};
 
