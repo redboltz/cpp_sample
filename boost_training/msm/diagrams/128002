@@ -1,7 +1,7 @@
 format 76
 "test" // test
-  revision 10
-  modified_by 2 "kondo"
+  revision 11
+  modified_by 2 "P0485193"
   // class settings
   //class diagram settings
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -364,6 +364,92 @@ format 76
 
 	transition 171138 "Event2/Action2"
 	  on state_ref 176002 // State1
+	end
+      end
+    end
+
+    state 182658 "08_HistryAndEntryPoint"
+      stereotype "machine"
+      statediagram 174082 "HistoryAndEntryPoint"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 175618 initial 
+	transition 177922 "<transition>"
+	  on state_ref 182914 // State2
+	  external 
+	end
+      end
+
+      state 182786 "State1"
+	  uml_on_entry "\"State1::on_entry()\""
+	  uml_on_exit "\"State1::on_exit()\""
+	pseudostate 175746 shallow_history 
+	  transition 178434 "<transition>"
+	    on state_ref 183170 // State1_1
+	    external 
+	  end
+	end
+
+	pseudostate 175874 entry_point "Entry1"
+	  transition 178946 "<transition>"
+	    on state_ref 183426 // State1_3
+	    external 
+	  end
+	end
+
+	state 183170 "State1_1"
+	    uml_on_entry "\"State1_1::on_entry()\""
+	    uml_on_exit "\"State1_1::on_exit()\""
+	  transition 178562 "Event2"
+	    on state_ref 183298 // State1_2
+	    external 
+	  end
+	end
+
+	state 183298 "State1_2"
+	    uml_on_entry "\"State1_2::on_entry()\""
+	    uml_on_exit "\"State1_2::on_exit()\""
+	  transition 178690 "Event2"
+	    on state_ref 183426 // State1_3
+	    external 
+	  end
+
+	end
+
+	state 183426 "State1_3"
+	    uml_on_entry "\"State1_3::on_entry()\""
+	    uml_on_exit "\"State1_3::on_exit()\""
+	end
+
+	transition 179074 "Event3"
+	  on state_ref 183042 // State3
+	  external 
+	end
+      end
+
+      state 182914 "State2"
+	  uml_on_entry "\"State2::on_entry()\""
+	  uml_on_exit "\"State2::on_exit()\""
+	transition 178178 "Event1"
+	  on pseudostate_ref 175746 // shallow_history
+	  external 
+	end
+      end
+
+      state 183042 "State3"
+	  uml_on_entry "\"State3::on_entry()\""
+	  uml_on_exit "\"State3::on_exit()\""
+	transition 178306 "Event1"
+	  on pseudostate_ref 175874 // entry_point
+	  external 
+	end
+
+	transition 179202 "Event4"
+	  on pseudostate_ref 175746 // shallow_history
+	  external 
 	end
       end
     end
