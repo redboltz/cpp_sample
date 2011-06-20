@@ -18,7 +18,6 @@ namespace {
     struct Sm1_:public msm::front::state_machine_def<Sm1_>
     {
         // States
-        struct Init:msm::front::state<> {};
         struct State1:msm::front::state<> 
         {
             // Entry action
@@ -34,7 +33,7 @@ namespace {
         };
 
         // Set initial state
-        typedef Init initial_state;
+        typedef State1 initial_state;
 
         // Actions
         struct Action1 {
