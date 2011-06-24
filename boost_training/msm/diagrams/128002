@@ -1,7 +1,7 @@
 format 76
 "test" // test
-  revision 11
-  modified_by 2 "P0485193"
+  revision 12
+  modified_by 2 "kondo"
   // class settings
   //class diagram settings
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -416,7 +416,6 @@ format 76
 	    on state_ref 183426 // State1_3
 	    external 
 	  end
-
 	end
 
 	state 183426 "State1_3"
@@ -449,6 +448,65 @@ format 76
 
 	transition 179202 "Event4"
 	  on pseudostate_ref 175746 // shallow_history
+	  external 
+	end
+      end
+    end
+
+    state 189954 "09_AutoDeduceEntry"
+      stereotype "machine"
+      statediagram 180610 "AutoDeduceEntry"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 182402 initial 
+	transition 185730 "<transition>"
+	  on state_ref 190466 // State1
+	  external 
+	end
+      end
+
+      state 190082 "State2"
+	region 128002 "region"
+	  state 190210 "State2_A"
+	  end
+
+	  pseudostate 182530 initial 
+	    transition 185858 "<transition>"
+	      on state_ref 190210 // State2_A
+	      external 
+	    end
+	  end
+	end
+
+	region 128130 "region"
+	  state 190338 "State2_B_1"
+	  end
+
+	  pseudostate 182658 initial 
+	    transition 185986 "<transition>"
+	      on state_ref 190594 // State2_B_2
+	      external 
+	    end
+	  end
+
+	  state 190594 "State2_B_2"
+	  end
+	end
+      end
+
+      state 190466 "State1"
+	transition 186114 "Event1"
+	  on pseudostate_ref 182786 // entry_point
+	  external 
+	end
+      end
+
+      pseudostate 182786 entry_point "Entry1"
+	transition 186242 "<transition>"
+	  on state_ref 190338 // State2_B_1
 	  external 
 	end
       end

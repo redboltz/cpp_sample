@@ -1,4 +1,4 @@
-window_sizes 1131 1028 288 771 800 76
+window_sizes 852 516 288 771 800 76
 diagrams
   statediagram_ref 154242 // WhyIsInitActionNeededSimpler
     353 887 100 4 0 0
@@ -12,12 +12,15 @@ diagrams
     665 709 100 4 0 0
   statediagram_ref 167554 // ParentInternalTransition
     833 881 100 4 0 0
-  active  statediagram_ref 174082 // HistoryAndEntryPoint
+  statediagram_ref 174082 // HistoryAndEntryPoint
     837 879 100 4 0 0
+  active  statediagram_ref 180610 // AutoDeduceEntry
+    558 367 100 4 0 0
 end
 show_stereotypes
-selected statediagram_ref 174082 // HistoryAndEntryPoint
+selected region_ref 128002 // region
 open
-  state_ref 182786 // State1
+  region_ref 128002 // region
+  region_ref 128130 // region
 end
 end

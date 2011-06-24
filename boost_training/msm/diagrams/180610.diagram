@@ -1,0 +1,60 @@
+format 76
+
+pseudostatecanvas 128002 pseudostate_ref 182402 // initial
+   xyz 57 113 2000
+end
+statecanvas 128130 state_ref 190082 // State2
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 203 19 2000 273 263
+end
+statecanvas 128258 state_ref 190210 // State2_A
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 309 91 2005 73 29
+end
+statecanvas 128386 state_ref 190338 // State2_B_1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 249 171 2005 85 29
+end
+statecanvas 128514 state_ref 190466 // State1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 29 171 2000 73 29
+end
+pseudostatecanvas 128770 pseudostate_ref 182530 // initial
+   xyz 336 50 2005
+end
+pseudostatecanvas 129026 pseudostate_ref 182658 // initial
+   xyz 380 222 2010
+end
+statecanvas 129154 state_ref 190594 // State2_B_2
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 251 217 2005 85 29
+end
+pseudostatecanvas 129410 pseudostate_ref 182786 // entry_point
+   xyz 194 177 3005 label_xy 166 201
+end
+transitioncanvas 128642 transition_ref 185730 // <transition>
+  
+  from ref 128002 z 2001 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128898 transition_ref 185858 // <transition>
+  
+  from ref 128770 z 2006 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129282 transition_ref 185986 // <transition>
+  
+  from ref 129026 z 2011 to ref 129154
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129538 transition_ref 186114 // Event1
+  
+  from ref 128514 z 3006 label "Event1" xyz 116.5 167 3000 to ref 129410
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129666 transition_ref 186242 // <transition>
+  
+  from ref 129410 z 3006 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+end
