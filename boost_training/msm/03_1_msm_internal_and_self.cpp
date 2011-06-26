@@ -22,12 +22,12 @@ namespace {
         {
             // Entry action
             template <class Event,class Fsm>
-            void on_entry(Event const&, Fsm&) {
+            void on_entry(Event const&, Fsm&) const {
                 std::cout << "State1::on_entry()" << std::endl;
             }
             // Exit action
             template <class Event,class Fsm>
-            void on_exit(Event const&, Fsm&) {
+            void on_exit(Event const&, Fsm&) const {
                 std::cout << "State1::on_exit()" << std::endl;
             }
         };
@@ -38,14 +38,14 @@ namespace {
         // Actions
         struct Action1 {
             template <class Event, class Fsm, class SourceState, class TargetState>
-            void operator()(Event const&, Fsm&, SourceState&, TargetState&)
+            void operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
             {
                 std::cout << "Action1()" << std::endl;
             }
         };
         struct Action2 {
             template <class Event, class Fsm, class SourceState, class TargetState>
-            void operator()(Event const&, Fsm&, SourceState&, TargetState&)
+            void operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
             {
                 std::cout << "Action2()" << std::endl;
             }

@@ -33,7 +33,7 @@ namespace {
             void on_exit(Event const&, Fsm&) {
                 std::cout << "State1::on_exit()" << std::endl;
             }
-            struct Entry1:public msm::front::entry_pseudo_state<0> {};
+            struct Entry1:public msm::front::entry_pseudo_state<> {};
             struct State1_1 : msm::front::state<> {
                 // Entry action
                 template <class Event,class Fsm>
@@ -91,7 +91,7 @@ namespace {
             void on_exit(Event const&, Fsm&) {
                 std::cout << "State2::on_exit()" << std::endl;
             }
-		};
+        };
         struct State3:msm::front::state<> {
             // Entry action
             template <class Event,class Fsm>
@@ -103,7 +103,7 @@ namespace {
             void on_exit(Event const&, Fsm&) {
                 std::cout << "State3::on_exit()" << std::endl;
             }
-		};
+        };
 
         // Set initial state
         typedef State2 initial_state;
@@ -149,10 +149,27 @@ int main()
 
 // Output:
 //
-// State1::on_entry()
+// State2::on_entry()
 // > Send Event1
-// State1::on_exit()
-// Action1()
+// State2::on_exit()
 // State1::on_entry()
+// State1_1::on_entry()
 // > Send Event2
-// Action2()
+// State1_1::on_exit()
+// State1_2::on_entry()
+// > Send Event3
+// State1_2::on_exit()
+// State1::on_exit()
+// State3::on_entry()
+// > Send Event4
+// State3::on_exit()
+// State1::on_entry()
+// State1_2::on_entry()
+// > Send Event3
+// State1_2::on_exit()
+// State1::on_exit()
+// State3::on_entry()
+// > Send Event1
+// State3::on_exit()
+// State1::on_entry()
+// State1_2::on_entry()

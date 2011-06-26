@@ -21,12 +21,12 @@ namespace {
         {
             // Entry action
             template <class Event,class Fsm>
-            void on_entry(Event const&, Fsm&) {
+            void on_entry(Event const&, Fsm&) const {
                 std::cout << "State1::on_entry()" << std::endl;
             }
             // Exit action
             template <class Event,class Fsm>
-            void on_exit(Event const&, Fsm&) {
+            void on_exit(Event const&, Fsm&) const {
                 std::cout << "State1::on_exit()" << std::endl;
             }
         };

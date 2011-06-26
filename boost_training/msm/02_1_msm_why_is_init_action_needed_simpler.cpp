@@ -38,7 +38,7 @@ namespace {
         // Actions
         struct InitAction {
             template <class Event, class Fsm, class SourceState, class TargetState>
-            void operator()(Event const&, Fsm&, SourceState&, TargetState&)
+            void operator()(Event const&, Fsm&, SourceState&, TargetState&) const
             {
                 std::cout << "InitAction()" << std::endl;
             }
