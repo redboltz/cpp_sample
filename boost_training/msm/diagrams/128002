@@ -1,6 +1,6 @@
 format 76
 "test" // test
-  revision 12
+  revision 13
   modified_by 2 "kondo"
   // class settings
   //class diagram settings
@@ -507,6 +507,48 @@ format 76
       pseudostate 182786 entry_point "Entry1"
 	transition 186242 "<transition>"
 	  on state_ref 190338 // State2_B_1
+	  external 
+	end
+      end
+    end
+
+    state 197122 "10_ChoiceAndElse"
+      stereotype "machine"
+      statediagram 187138 "ChoiceAndElse"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 189314 initial 
+	transition 193154 "<transition>"
+	  on state_ref 197250 // State1
+	  external 
+	end
+      end
+
+      state 197250 "State1"
+	  uml_on_entry "\"State1::on_entry()\""
+	  uml_on_exit "\"State1::on_exit()\""
+	transition 192770 "Event1/ res = Action1"
+	  on pseudostate_ref 189442 // choice
+	  external 
+	end
+      end
+
+      state 197378 "State2"
+	  uml_on_entry "\"State2::on_entry()\""
+	  uml_on_exit "\"State2::on_exit()\""
+      end
+
+      pseudostate 189442 choice 
+	transition 192898 "[res> 10]"
+	  on state_ref 197378 // State2
+	  external 
+	end
+
+	transition 193026 "[else]"
+	  on state_ref 197250 // State1
 	  external 
 	end
       end
