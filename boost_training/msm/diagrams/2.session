@@ -18,7 +18,7 @@ diagrams
     558 367 100 4 0 0
 end
 show_stereotypes
-selected region_ref 128002 // region
+selected region_ref 128130 // region
 open
   region_ref 128002 // region
   region_ref 128130 // region
