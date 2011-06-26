@@ -14,9 +14,9 @@ end
 pseudostatecanvas 128386 pseudostate_ref 189442 // choice
    xyz 368 120 2000
 end
-transitioncanvas 128514 transition_ref 192770 // Event1/ res = Action1
+transitioncanvas 128514 transition_ref 192770 // Event1(val)/ res = val + 5
   
-  from ref 128130 z 2001 label "Event1/ res = Action1" xyz 238 119 3000 to ref 128386
+  from ref 128130 z 2001 label "Event1(val)/ res = val + 5" xyz 229 120 3000 to ref 128386
   write_horizontally default show_definition default drawing_language default
 end
 transitioncanvas 128642 transition_ref 192898 // [res> 10]

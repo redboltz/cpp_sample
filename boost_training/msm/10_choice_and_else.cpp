@@ -3,6 +3,7 @@
 
 #include <boost/msm/front/state_machine_def.hpp>
 #include <boost/msm/front/functor_row.hpp>
+
 #include <boost/msm/front/euml/euml.hpp>
 
 namespace {
@@ -10,7 +11,6 @@ namespace {
     namespace msmf = boost::msm::front;
     namespace msme = boost::msm::front::euml;
     namespace mpl = boost::mpl;
-
     // ----- Events
     struct Event1 { 
         int val;
@@ -65,7 +65,7 @@ namespace {
             template <class Event, class Fsm, class SourceState, class TargetState>
             bool operator()(Event const&, Fsm& fsm, SourceState&, TargetState&) const 
             {
-                return fsm.res> 10;
+                return fsm.res > 10;
             }
         };
 

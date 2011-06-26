@@ -530,7 +530,7 @@ format 76
       state 197250 "State1"
 	  uml_on_entry "\"State1::on_entry()\""
 	  uml_on_exit "\"State1::on_exit()\""
-	transition 192770 "Event1/ res = Action1"
+	transition 192770 "Event1(val)/ res = val + 5"
 	  on pseudostate_ref 189442 // choice
 	  external 
 	end
