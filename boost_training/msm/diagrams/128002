@@ -1,6 +1,6 @@
 format 76
 "test" // test
-  revision 13
+  revision 14
   modified_by 2 "kondo"
   // class settings
   //class diagram settings
@@ -551,6 +551,66 @@ format 76
 	  on state_ref 197250 // State1
 	  external 
 	end
+      end
+    end
+
+    state 203906 "11_ExitPointEvent"
+      stereotype "machine"
+      statediagram 193666 "ExitPointEvent"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 195970 initial 
+	transition 199682 "<transition>"
+	  on state_ref 204034 // State1
+	  external 
+	end
+      end
+
+      state 204034 "State1"
+	  uml_on_entry "\"State1::on_entry()\""
+	  uml_on_exit "\"State1::on_exit()\""
+	pseudostate 196098 exit_point "Exit1"
+	  transition 200066 "Event2/Action2"
+	    on state_ref 204290 // State2
+	    external 
+	  end
+	end
+
+	pseudostate 196226 initial 
+	  transition 199810 "<transition>"
+	    on state_ref 204162 // State1_1
+	    external 
+	  end
+	end
+
+	state 204162 "State1_1"
+	    uml_on_entry "\"State1_1::on_entry()\""
+	    uml_on_exit "\"State1_1::on_exit()\""
+	  transition 199938 "Event1/Action1"
+	    on pseudostate_ref 196098 // exit_point
+	    external 
+	  end
+
+	  transition 200194 "Event3/Action3"
+	    on pseudostate_ref 196354 // exit_point
+	    external 
+	  end
+	end
+
+	pseudostate 196354 exit_point "Exit2"
+	  transition 200322 "/Action4"
+	    on state_ref 204290 // State2
+	    external 
+	  end
+	end
+      end
+
+      state 204290 "State2"
+	  uml_on_entry "\"State2::on_entry()\""
+	  uml_on_exit "\"State2::on_exit()\""
       end
     end
   end

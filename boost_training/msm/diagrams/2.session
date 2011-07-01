@@ -1,4 +1,4 @@
-window_sizes 1033 868 288 771 800 76
+window_sizes 1033 868 288 771 715 80
 diagrams
   statediagram_ref 154242 // WhyIsInitActionNeededSimpler
     353 887 100 4 0 0
@@ -16,12 +16,15 @@ diagrams
     837 879 100 4 0 0
   statediagram_ref 180610 // AutoDeduceEntry
     558 367 100 4 0 0
-  active  statediagram_ref 187138 // ChoiceAndElse
+  statediagram_ref 187138 // ChoiceAndElse
     739 719 100 4 0 0
+  active  statediagram_ref 193666 // ExitPointEvent
+    739 715 100 4 0 0
 end
 show_stereotypes
-selected state_ref 197122 // 10_ChoiceAndElse
+selected statediagram_ref 193666 // ExitPointEvent
 open
   state_ref 168194 // 03_InternalAndSelf
+  state_ref 204034 // State1
 end
 end

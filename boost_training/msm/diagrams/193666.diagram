@@ -1,0 +1,60 @@
+format 76
+
+pseudostatecanvas 128002 pseudostate_ref 195970 // initial
+   xyz 198 32 2000
+end
+statecanvas 128130 state_ref 204034 // State1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 46 74 2000 331 209
+end
+pseudostatecanvas 128258 pseudostate_ref 196098 // exit_point
+   xyz 165 271 3005 label_xy 190 292
+end
+pseudostatecanvas 128514 pseudostate_ref 196226 // initial
+   xyz 166 143 2005
+end
+statecanvas 128642 state_ref 204162 // State1_1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 70 185 2005 215 65
+end
+statecanvas 129026 state_ref 204290 // State2
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 72 371 2000 203 65
+end
+pseudostatecanvas 129282 pseudostate_ref 196354 // exit_point
+   xyz 362 206 3005 label_xy 336 226
+end
+transitioncanvas 128386 transition_ref 199682 // <transition>
+  
+  from ref 128002 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128770 transition_ref 199810 // <transition>
+  
+  from ref 128514 z 2006 to ref 128642
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128898 transition_ref 199938 // Event1/Action1
+  
+  from ref 128642 z 3006 label "Event1/Action1" xyz 181 255.5 3000 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129154 transition_ref 200066 // Event2/Action2
+  
+  from ref 128258 z 3006 label "Event2/Action2" xyz 190.5 328.5 3000 to ref 129026
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129410 transition_ref 200194 // Event3/Action3
+  
+  from ref 128642 z 3006 label "Event3/Action3" xyz 289.5 188 3000 to ref 129282
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129538 transition_ref 200322 // /Action4
+  decenter_begin 526
+  
+  from ref 129282 z 3006 label "/Action4" xyz 400 197 3000 to point 407 213
+  line 129794 z 3006 to point 407 400
+  line 129666 z 3006 to ref 129026
+  write_horizontally default show_definition default drawing_language default
+end
+end
