@@ -14,7 +14,7 @@ namespace {
     struct Event1 {};
 
     // ----- State machine
-    struct Sm1_:public msm::front::state_machine_def<Sm1_>
+    struct Sm1_:msm::front::state_machine_def<Sm1_>
     {
         // States
         struct State1:msm::front::state<> 

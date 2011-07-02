@@ -17,11 +17,11 @@ namespace {
     struct Event4 {};
 
     // ----- State machine
-    struct Sm1_:public msm::front::state_machine_def<Sm1_>
+    struct Sm1_:msm::front::state_machine_def<Sm1_>
     {
         // States
         struct Init:msm::front::state<> {};
-        struct State1_:public msm::front::state_machine_def<State1_>
+        struct State1_:msm::front::state_machine_def<State1_>
         {
             // Entry action
             template <class Event,class Fsm>
@@ -33,7 +33,7 @@ namespace {
             void on_exit(Event const&, Fsm&) {
                 std::cout << "State1::on_exit()" << std::endl;
             }
-            struct Entry1:public msm::front::entry_pseudo_state<> {};
+            struct Entry1:msm::front::entry_pseudo_state<> {};
             struct State1_1 : msm::front::state<> {
                 // Entry action
                 template <class Event,class Fsm>

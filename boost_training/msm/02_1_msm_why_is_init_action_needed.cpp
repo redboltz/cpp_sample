@@ -15,7 +15,7 @@ namespace {
     struct Event2 {};
 
     // ----- State machine (Outer)
-    struct Sm1_:public msm::front::state_machine_def<Sm1_>
+    struct Sm1_:msm::front::state_machine_def<Sm1_>
     {
         // States
         struct State1:msm::front::state<> 
@@ -32,7 +32,7 @@ namespace {
             }
         };
         // ----- State machine (Inner) as State2 of Outer state machine.
-        struct State2_:public msm::front::state_machine_def<State2_>
+        struct State2_:msm::front::state_machine_def<State2_>
         {
             // Entry action
             template <class Event,class Fsm>
@@ -47,7 +47,7 @@ namespace {
 
             // (Sub) States
             struct Init:msm::front::state<> {};
-            struct State2_1:msm::front::state<>,  public msm::front::explicit_entry<0> 
+            struct State2_1:msm::front::state<>, msm::front::explicit_entry<0> 
             {
                 // Entry action
                 template <class Event,class Fsm>
