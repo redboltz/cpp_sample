@@ -7,15 +7,15 @@
 namespace {
 
 struct MyQGraphicsRectItem:QGraphicsRectItem {
-	MyQGraphicsRectItem ( qreal x, qreal y, qreal width, qreal height, QGraphicsItem * parent = 0 )
-		:QGraphicsRectItem(x, y, width, height, parent), id(++master) {
-		qDebug() << "MyQGraphicsRectItem():" << id << "\n";
-	}
-	~MyQGraphicsRectItem() {
-		qDebug() << "~MyQGraphicsRectItem():" << id << "\n";
-	}
-	int id;
-	static int master;
+    MyQGraphicsRectItem ( qreal x, qreal y, qreal width, qreal height, QGraphicsItem * parent = 0 )
+        :QGraphicsRectItem(x, y, width, height, parent), id(++master) {
+        qDebug() << "MyQGraphicsRectItem():" << id << "\n";
+    }
+    ~MyQGraphicsRectItem() {
+        qDebug() << "~MyQGraphicsRectItem():" << id << "\n";
+    }
+    int id;
+    static int master;
 };
 
 int MyQGraphicsRectItem::master;
@@ -24,32 +24,32 @@ struct my_exp:std::exception {};
 
 void test1() {
     qDebug() << "test1()\n";
-	QGraphicsScene scene;
-	QGraphicsRectItem* item1 = new MyQGraphicsRectItem(10, 10, 100, 100);
-	QGraphicsRectItem* item2 = new MyQGraphicsRectItem(20, 20, 80, 80);
+    QGraphicsScene scene;
+    QGraphicsRectItem* item1 = new MyQGraphicsRectItem(10, 10, 100, 100);
+    QGraphicsRectItem* item2 = new MyQGraphicsRectItem(20, 20, 80, 80);
 
     // exception unsafe
 
     // item2 is owned by item1
-	item2->setParentItem(item1); // It's too late.
+    item2->setParentItem(item1); // It's too late.
 
     // item1 is owned by scene
-	scene.addItem(item1); // It's too late.
+    scene.addItem(item1); // It's too late.
 }
 
 void test2() {
     qDebug() << "test2()\n";
     try {
-	    QGraphicsScene scene;
-	    QGraphicsRectItem* item1 = new MyQGraphicsRectItem(10, 10, 100, 100);
-	    QGraphicsRectItem* item2 = new MyQGraphicsRectItem(20, 20, 80, 80);
+        QGraphicsScene scene;
+        QGraphicsRectItem* item1 = new MyQGraphicsRectItem(10, 10, 100, 100);
+        QGraphicsRectItem* item2 = new MyQGraphicsRectItem(20, 20, 80, 80);
         // exception unsafe
         throw(my_exp());
 
         // item2 is owned by item1.
         item2->setParentItem(item1); // It's too late.
         // item1 is owned by scene.
-	    scene.addItem(item1); // It's too late.
+        scene.addItem(item1); // It's too late.
     }
     catch (...) {}
 }
@@ -57,16 +57,16 @@ void test2() {
 void test3() {
     qDebug() << "test3()\n";
     try {
-	    QGraphicsScene scene;
-	    QGraphicsRectItem* item1 = new MyQGraphicsRectItem(10, 10, 100, 100);
+        QGraphicsScene scene;
+        QGraphicsRectItem* item1 = new MyQGraphicsRectItem(10, 10, 100, 100);
         // Don't do anything here.
-	    scene.addItem(item1); // item1 will delete automatically by scene.
-	    QGraphicsRectItem* item2 = new MyQGraphicsRectItem(20, 20, 80, 80);
+        scene.addItem(item1); // item1 will delete automatically by scene.
+        QGraphicsRectItem* item2 = new MyQGraphicsRectItem(20, 20, 80, 80);
         // exception unsafe
         throw(my_exp());
 
         // item2 is owned by item1.
-	    item2->setParentItem(item1); // It's too late.
+        item2->setParentItem(item1); // It's too late.
     }
     catch (...) {}
 }
@@ -101,7 +101,7 @@ void test6() {
     QGraphicsRectItem* item2 = new MyQGraphicsRectItem(20, 20, 80, 80, item1);
     // item2 is no longer owned by item1.
     // We can access the scene via item2.
-	item2->scene()->removeItem(item2);
+    item2->scene()->removeItem(item2);
     // item2 doesn't delete automatically.
 }
 
@@ -109,7 +109,7 @@ void test6() {
 
 int main(int argc, char *argv[])
 {
-	QApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     test1();
     test2();
@@ -117,5 +117,5 @@ int main(int argc, char *argv[])
     test4();
     test5();
     test6();
-	//app.exec();
+    //app.exec();
 }
