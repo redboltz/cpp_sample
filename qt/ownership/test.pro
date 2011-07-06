@@ -3,6 +3,8 @@ TARGET = test
 QT += core
 QT += gui
 
+CONFIG += console
+
 INCLUDEPATH += $$(BOOSTPATH)
 
 build_pass:CONFIG(release, debug|release) {
