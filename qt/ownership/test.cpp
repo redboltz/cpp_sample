@@ -135,7 +135,7 @@ struct UnmanagedQGraphicsItem:T {
     BOOST_STATIC_ASSERT((boost::is_base_of<QGraphicsItem, T>::value));
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
     template <class... Args>
-    UnmanagedQGraphicsItem(Args && ... args):T(args) {}
+    UnmanagedQGraphicsItem(Args&&... args):T(args...) {}
 #else
     template <class A1>
     UnmanagedQGraphicsItem(A1 const& a1):T(a1) {}

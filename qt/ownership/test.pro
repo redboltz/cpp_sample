@@ -14,7 +14,7 @@ build_pass:CONFIG(release, debug|release) {
         LIBS += -L$$(BOOSTLIBPATH)
     }
     unix {
-        QMAKE_CXXFLAGS += -Os -O3
+        QMAKE_CXXFLAGS += -std=c++0x -Os -O3
         QMAKE_LFLAGS += -Wl,-Map=le.map
         !NO_BOOST_FILESYSTEM {
             LIBS += -L$$(BOOSTLIBPATH) -lboost_filesystem
@@ -28,7 +28,7 @@ build_pass:CONFIG(debug, debug|release) {
         LIBS += -L$$(BOOSTLIBPATH)
     }
     unix {
-        QMAKE_CXXFLAGS += -g
+        QMAKE_CXXFLAGS += -std=c++0x -g
         QMAKE_LFLAGS += -Wl,-Map=le.map
         !NO_BOOST_FILESYSTEM {
             LIBS += -L$$(BOOSTLIBPATH) -lboost_filesystem
