@@ -149,14 +149,12 @@ struct UnmanagedQGraphicsItem:T {
     UnmanagedQGraphicsItem(A1 const& a1, A2 const& a2, A3 const& a3, A4 const& a4, A5 const& a5):T(a1, a2, a3, a4, a5) {}
 #endif
     ~UnmanagedQGraphicsItem() {
-        clearParent(*this);
-    }
-private:
-    static void clearParent(QGraphicsItem& item) {
-        BOOST_FOREACH(QGraphicsItem* childItem, item.childItems()) {
-            clearParent(*childItem);
+        BOOST_FOREACH(QGraphicsItem* item, childItems()) {
+            item->setParentItem(0);
+            if (QGraphicsScene* scene = item->scene()) {
+                scene->removeItem(item);
+            }
         }
-        item.setParentItem(0);
     }
 };
 
@@ -197,9 +195,12 @@ void test11() {
     UnmanagedQGraphicsScene scene;
     typedef UnmanagedQGraphicsItem<MyQGraphicsRectItem> UnmanagedMyQGraphicsRectItem;
     typedef boost::shared_ptr<UnmanagedMyQGraphicsRectItem> UnmanagedMyQGraphicsRectItemSp;
-    UnmanagedMyQGraphicsRectItemSp item1(new UnmanagedMyQGraphicsRectItem(10, 10, 100, 100));
-    UnmanagedMyQGraphicsRectItemSp item2(new UnmanagedMyQGraphicsRectItem(20, 20, 80, 80, &*item1));
-    scene.addItem(&*item1);
+    {
+        UnmanagedMyQGraphicsRectItemSp item1(new UnmanagedMyQGraphicsRectItem(10, 10, 100, 100));
+        UnmanagedMyQGraphicsRectItemSp item2(new UnmanagedMyQGraphicsRectItem(20, 20, 80, 80, &*item1));
+        scene.addItem(&*item1);
+        item1.reset();
+    }
 }
 
 } // noname
