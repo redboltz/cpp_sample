@@ -5,6 +5,9 @@
 #include <boost/msm/front/functor_row.hpp>
 #include <boost/msm/front/euml/euml.hpp>
 
+#include <boost/type_traits/is_same.hpp>
+#include <boost/static_assert.hpp>
+
 namespace {
     namespace msm = boost::msm;
     namespace msmf = boost::msm::front;
@@ -39,7 +42,7 @@ namespace {
                 bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
                 {
                     std::cout << "Guard1_2" << std::endl;
-                    return false;
+                    return true;
                 }
             };
             struct Guard1_3 {
@@ -47,7 +50,7 @@ namespace {
                 bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
                 {
                     std::cout << "Guard1_3" << std::endl;
-                    return false;
+                    return true;
                 }
             };
             struct Guard1_4 {
@@ -58,14 +61,30 @@ namespace {
                     return false;
                 }
             };
+            // Actions
+            struct Action1_2 {
+                template <class Event, class Fsm, class SourceState, class TargetState>
+                void operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
+                {
+                    std::cout << "Action1_2" << std::endl;
+                }
+            };
+            struct Action1_3 {
+                template <class Event, class Fsm, class SourceState, class TargetState>
+                void operator()(Event const&, Fsm&, SourceState&, TargetState& tst) const 
+                {
+//                  BOOST_STATIC_ASSERT((boost::is_same<TargetState, msmf::none>::value));
+                    std::cout << "Action1_3" << std::endl;
+                }
+            };
             // Set initial state
             typedef State1_1 initial_state;
             // Transition table
             struct transition_table:mpl::vector<
                 //          Start     Event   Next        Action      Guard
                 msmf::Row < State1_1, Event1, State1_1,   msmf::none, Guard1_1 >,
-                msmf::Row < State1_1, Event1, State1_2,   msmf::none, Guard1_2 >,
-                msmf::Row < State1_1, Event1, State1_3,   msmf::none, Guard1_3 >,
+                msmf::Row < State1_1, Event1, msmf::none, Action1_2,  Guard1_2 >,
+                msmf::Row < State1_1, Event1, msmf::none, Action1_3,  Guard1_3 >,
                 msmf::Row < State1_1, Event1, State1_4,   msmf::none, Guard1_4 >
             > {};
         };
@@ -90,7 +109,7 @@ namespace {
             bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
             {
                 std::cout << "Guard2" << std::endl;
-                return false;
+                return true;
             }
         };
         struct Guard3 {
@@ -98,7 +117,7 @@ namespace {
             bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
             {
                 std::cout << "Guard3" << std::endl;
-                return false;
+                return true;
             }
         };
         struct Guard4 {
@@ -110,6 +129,21 @@ namespace {
             }
         };
 
+        // Actions
+        struct Action2 {
+            template <class Event, class Fsm, class SourceState, class TargetState>
+            void operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
+            {
+                std::cout << "Action2" << std::endl;
+            }
+        };
+        struct Action3 {
+            template <class Event, class Fsm, class SourceState, class TargetState>
+            void operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
+            {
+                std::cout << "Action3" << std::endl;
+            }
+        };
         // Set initial state
         typedef State1 initial_state;
 
@@ -117,8 +151,8 @@ namespace {
         struct transition_table:mpl::vector<
             //          Start   Event   Next        Action      Guard
             msmf::Row < State1, Event1, State1,     msmf::none, Guard1 >,
-            msmf::Row < State1, Event1, State2,     msmf::none, Guard2 >,
-            msmf::Row < State1, Event1, State3,     msmf::none, Guard3 >,
+            msmf::Row < State1, Event1, msmf::none, msmf::none, Guard2 >,
+            msmf::Row < State1, Event1, msmf::none, Action3,    Guard3 >,
             msmf::Row < State1, Event1, State4,     msmf::none, Guard4 >
         > {};
     };
@@ -148,13 +182,16 @@ int main()
 }
 
 // Output:
-// 
+//
 // > Send Event1
 // Guard1_1
 // Guard1_2
+// Action1_2
 // Guard1_3
+// Action1_3
 // Guard1_4
 // Guard1
 // Guard2
 // Guard3
+// Action3
 // Guard4
