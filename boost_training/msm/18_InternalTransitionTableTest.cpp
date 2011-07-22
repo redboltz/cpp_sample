@@ -65,11 +65,13 @@ namespace {
             };
             struct State1_2:msm::front::state<> {};
 
+#if 0
             // Transition table
             struct transition_table:mpl::vector<
                 //          Start     Event   Next        Action      Guard
                 msmf::Row < State1_1, Event1, msmf::none, Action1_2,  Guard1_2 > 
             > {};
+#endif
             // No handled event handler
             template <class Fsm,class Event> 
             void no_transition(Event const& e, Fsm& ,int state) {

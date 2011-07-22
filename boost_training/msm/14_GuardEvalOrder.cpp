@@ -60,6 +60,10 @@ namespace {
             };
             // Set initial state
             typedef State1_1 initial_state;
+
+            // Set eval direction
+            typedef int evaluation_forward;
+
             // Transition table
             struct transition_table:mpl::vector<
                 //          Start     Event   Next        Action      Guard
@@ -112,6 +116,9 @@ namespace {
 
         // Set initial state
         typedef State1 initial_state;
+
+        // Set eval direction
+        typedef int evaluation_forward;
 
         // Transition table
         struct transition_table:mpl::vector<
