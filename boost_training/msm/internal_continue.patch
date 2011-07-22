@@ -1,0 +1,106 @@
+Index: back/common_types.hpp
+===================================================================
+--- back/common_types.hpp	(リビジョン 73158)
++++ back/common_types.hpp	(作業コピー)
+@@ -24,7 +24,8 @@
+     HANDLED_FALSE=0,
+     HANDLED_TRUE =1,
+     HANDLED_GUARD_REJECT=2,
+-    HANDLED_DEFERRED=4
++    HANDLED_DEFERRED=4,
++    HANDLED_CONTINUE=8
+ } HandledEnum;
+ 
+ typedef HandledEnum execute_return;
+Index: back/state_machine.hpp
+===================================================================
+--- back/state_machine.hpp	(リビジョン 73158)
++++ back/state_machine.hpp	(作業コピー)
+@@ -687,7 +687,8 @@
+                              ::boost::fusion::at_key<current_state_type>(fsm.m_substate_list),
+                              ::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),
+                              fsm.m_substate_list);
+-            return res;
++            if (res == HANDLED_TRUE) res = HANDLED_CONTINUE;
++			return res;
+         }
+     };
+ 
+@@ -723,7 +724,7 @@
+                 // guard rejected the event, we stay in the current one
+                 return HANDLED_GUARD_REJECT;
+             }
+-            return HANDLED_TRUE;
++            return HANDLED_CONTINUE;
+         }
+     };
+ 
+@@ -752,6 +753,7 @@
+                             ::boost::fusion::at_key<next_state_type>(fsm.m_substate_list),
+                             fsm.m_substate_list);
+ 
++            if (res == HANDLED_TRUE) res = HANDLED_CONTINUE;
+             return res;
+         }
+     };
+@@ -772,7 +774,7 @@
+         {
+             BOOST_STATIC_CONSTANT(int, current_state = (get_state_id<stt,current_state_type>::type::value));
+             BOOST_ASSERT(state == (current_state));
+-            return HANDLED_TRUE;
++            return HANDLED_CONTINUE;
+         }
+     };
+     // transitions internal to this state machine (no substate involved)
+@@ -810,6 +812,7 @@
+                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                 fsm.m_substate_list);
++            if (res == HANDLED_TRUE) res = HANDLED_CONTINUE;
+             return res;
+         }
+     };
+@@ -831,6 +834,7 @@
+                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                 ::boost::fusion::at_key<StateType>(fsm.m_substate_list),
+                 fsm.m_substate_list);
++            if (res == HANDLED_TRUE) res = HANDLED_CONTINUE;
+             return res;
+         }
+     };
+@@ -862,7 +866,7 @@
+                 // guard rejected the event, we stay in the current one
+                 return HANDLED_GUARD_REJECT;
+             }
+-            return HANDLED_TRUE;
++            return HANDLED_CONTINUE;
+         }
+     };
+     template<
+@@ -876,7 +880,7 @@
+         typedef typename ROW::Evt transition_event;
+         static HandledEnum execute(library_sm& , int , int , transition_event const& )
+         {
+-            return HANDLED_TRUE;
++            return HANDLED_CONTINUE;
+         }
+     };
+     // Template used to form forwarding rows in the transition table for every row of a composite SM
+@@ -2265,7 +2269,7 @@
+              (static_cast<Derived*>(self))->on_entry(evt,fsm);
+              int state_id = get_state_id<stt,typename EventType::active_state::wrapped_entry>::value;
+              BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index >= 0);
+-             BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index < nr_regions::value);
++             BOOST_STATIC_ASSERT(find_region_id<typename EventType::active_state::wrapped_entry>::region_index <= nr_regions::value);
+              // just set the correct zone, the others will be default/history initialized
+              self->m_states[find_region_id<typename EventType::active_state::wrapped_entry>::region_index] = state_id;
+              self->internal_start(evt.m_event);
+@@ -2322,7 +2326,7 @@
+              {
+                  int state_id = get_state_id<stt,typename StateType::wrapped_entry>::value;
+                  BOOST_STATIC_ASSERT(find_region_id<typename StateType::wrapped_entry>::region_index >= 0);
+-                 BOOST_STATIC_ASSERT(find_region_id<typename StateType::wrapped_entry>::region_index < nr_regions::value);
++                 BOOST_STATIC_ASSERT(find_region_id<typename StateType::wrapped_entry>::region_index <= nr_regions::value);
+                  helper_self->m_states[find_region_id<typename StateType::wrapped_entry>::region_index] = state_id;
+              }
+          private:

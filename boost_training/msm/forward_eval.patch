@@ -1,0 +1,47 @@
+Index: back/dispatch_table.hpp
+===================================================================
+--- back/dispatch_table.hpp	(リビジョン 73158)
++++ back/dispatch_table.hpp	(作業コピー)
+@@ -64,15 +64,37 @@
+                     ::boost::mpl::false_ const & )
+             {
+                  // try the first guard
+-                 typedef typename ::boost::mpl::front<Sequence>::type first_row;
++                 typedef ::boost::mpl::front<Sequence> front_row;
++                 typedef ::boost::mpl::back<Sequence> back_row;
++                 typedef typename Fsm::template frow<State, Event> frow_type;
++                 typedef typename ::boost::is_same<typename front_row::type, frow_type> has_submachine;
++
++                 typedef typename ::boost::mpl::eval_if<
++                     has_submachine,
++                     front_row,
++                     back_row
++                 >::type first_row;
+                  HandledEnum res = first_row::execute(fsm,region_index,state,evt);
+                  if (HANDLED_TRUE!=res)
+                  {
+                     // if the first rejected, move on to the next one
+-                    HandledEnum sub_res = 
+-                         execute<typename ::boost::mpl::pop_front<Sequence>::type>(fsm,region_index,state,evt,
+-                            ::boost::mpl::bool_<
+-                                ::boost::mpl::empty<typename ::boost::mpl::pop_front<Sequence>::type>::type::value>());
++                    HandledEnum sub_res =
++                         execute<
++                             typename ::boost::mpl::eval_if<
++                                 has_submachine,
++                                 ::boost::mpl::pop_front<Sequence>,
++                                 ::boost::mpl::pop_back<Sequence>
++                             >::type
++                         >
++                         (fsm,region_index,state,evt,::boost::mpl::bool_<
++                             ::boost::mpl::empty<
++                                 typename ::boost::mpl::eval_if<
++                                     has_submachine,
++                                     ::boost::mpl::pop_front<Sequence>,
++                                     ::boost::mpl::pop_back<Sequence>
++                                 >::type
++                             >::type::value
++                         >());
+                     // if at least one guards rejects, the event will not generate a call to no_transition
+                     if ((HANDLED_FALSE==sub_res) && (HANDLED_GUARD_REJECT==res) )
+                         return HANDLED_GUARD_REJECT;
