@@ -21,36 +21,31 @@ namespace {
         struct State1_:msm::front::state_machine_def<State1_>
         {
             struct State1_1:msm::front::state<> {
-				 // Guards
-				struct Guard1_1_1 {
-					template <class Event, class Fsm, class SourceState, class TargetState>
-					bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
-					{
-						std::cout << "Guard1_1_1" << std::endl;
-						return false;
-					}
-				};
-				struct Guard1_1_2 {
-					template <class Event, class Fsm, class SourceState, class TargetState>
-					bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
-					{
-						std::cout << "Guard1_1_2" << std::endl;
-						return false;
-					}
-				};
+                 // Guards
+                struct Guard1_1_1 {
+                    template <class Event, class Fsm, class SourceState, class TargetState>
+                    bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
+                    {
+                        std::cout << "Guard1_1_1" << std::endl;
+                        return false;
+                    }
+                };
+                struct Guard1_1_2 {
+                    template <class Event, class Fsm, class SourceState, class TargetState>
+                    bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
+                    {
+                        std::cout << "Guard1_1_2" << std::endl;
+                        return false;
+                    }
+                };
                 // Internal Transition table
                 struct internal_transition_table : mpl::vector<
                     //               Event   Action      Guard
                     msmf::Internal < Event1, msmf::none, Guard1_1_1 >,
                     msmf::Internal < Event1, msmf::none, Guard1_1_2 >
                 > {};        
-				// Set eval direction
-				// typedef int evaluation_forward;
-			};
+            };
             struct State1_2:msm::front::state<> {};
-            struct State1_3:msm::front::state<> {};
-            struct State1_4:msm::front::state<> {};
-            struct State1_5:msm::front::state<> {};
              // Guards
             struct Guard1_1 {
                 template <class Event, class Fsm, class SourceState, class TargetState>
@@ -68,43 +63,19 @@ namespace {
                     return false;
                 }
             };
-            struct Guard1_3 {
-                template <class Event, class Fsm, class SourceState, class TargetState>
-                bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
-                {
-                    std::cout << "Guard1_3" << std::endl;
-                    return false;
-                }
-            };
-            struct Guard1_4 {
-                template <class Event, class Fsm, class SourceState, class TargetState>
-                bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
-                {
-                    std::cout << "Guard1_4" << std::endl;
-                    return false;
-                }
-            };
             // Set initial state
             typedef State1_1 initial_state;
-
-            // Set eval direction
-            // typedef int evaluation_forward;
 
             // Transition table
             struct transition_table:mpl::vector<
                 //          Start     Event   Next        Action      Guard
                 msmf::Row < State1_1, Event1, State1_1,   msmf::none, Guard1_1 >,
-                msmf::Row < State1_1, Event1, State1_2,   msmf::none, Guard1_2 >,
-                msmf::Row < State1_1, Event1, State1_3,   msmf::none, Guard1_3 >,
-                msmf::Row < State1_1, Event1, State1_4,   msmf::none, Guard1_4 >
+                msmf::Row < State1_1, Event1, State1_2,   msmf::none, Guard1_2 >
             > {};
         };
         // back-end
         typedef msm::back::state_machine<State1_> State1;
         struct State2:msm::front::state<> {};
-        struct State3:msm::front::state<> {};
-        struct State4:msm::front::state<> {};
-        struct State5:msm::front::state<> {};
 
          // Guards
         struct Guard1 {
@@ -123,36 +94,15 @@ namespace {
                 return false;
             }
         };
-        struct Guard3 {
-            template <class Event, class Fsm, class SourceState, class TargetState>
-            bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
-            {
-                std::cout << "Guard3" << std::endl;
-                return false;
-            }
-        };
-        struct Guard4 {
-            template <class Event, class Fsm, class SourceState, class TargetState>
-            bool operator()(Event const&, Fsm&, SourceState&, TargetState&) const 
-            {
-                std::cout << "Guard4" << std::endl;
-                return false;
-            }
-        };
 
         // Set initial state
         typedef State1 initial_state;
-
-        // Set eval direction
-        // typedef int evaluation_forward;
 
         // Transition table
         struct transition_table:mpl::vector<
             //          Start   Event   Next        Action      Guard
             msmf::Row < State1, Event1, State1,     msmf::none, Guard1 >,
-            msmf::Row < State1, Event1, State2,     msmf::none, Guard2 >,
-            msmf::Row < State1, Event1, State3,     msmf::none, Guard3 >,
-            msmf::Row < State1, Event1, State4,     msmf::none, Guard4 >
+            msmf::Row < State1, Event1, State2,     msmf::none, Guard2 >
         > {};
     };
 
@@ -181,13 +131,15 @@ int main()
 }
 
 // Output:
-// 
+//
 // > Send Event1
-// Guard1_1
+// Guard1_1_2
+// Guard1_1_1
 // Guard1_2
-// Guard1_3
-// Guard1_4
-// Guard1
+// Guard1_1
+// Guard1_1_2
+// Guard1_1_1
 // Guard2
-// Guard3
-// Guard4
+// Guard1
+
+
