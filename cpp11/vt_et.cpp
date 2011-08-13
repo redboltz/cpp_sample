@@ -20,12 +20,12 @@ apply(F const & f, Tuple && t )
 {
     
     return apply_(f, 
-		  std::forward<Tuple>(t),
+          std::forward<Tuple>(t),
                   etude::make_indices<
                       std::tuple_size<
-			  typename std::remove_reference<Tuple>::type
-		      >::value
-		  >());
+              typename std::remove_reference<Tuple>::type
+              >::value
+          >());
 }
 
 // test
