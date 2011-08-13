@@ -1,0 +1,84 @@
+format 76
+
+pseudostatecanvas 128002 pseudostate_ref 209794 // initial
+   xyz 87 136 2000
+end
+statecanvas 128130 state_ref 217986 // State1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 66 189 2000 59 29
+end
+statecanvas 128258 state_ref 218114 // State2
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 238 106 2000 357 193
+end
+pseudostatecanvas 128386 pseudostate_ref 209922 // entry_point
+   xyz 229 182 3005 label_xy 199 203
+end
+pseudostatecanvas 128514 pseudostate_ref 210050 // entry_point
+   xyz 228 246 3005 label_xy 199 270
+end
+statecanvas 129026 state_ref 218242 // State2_1
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 319 177 2005 71 29
+end
+statecanvas 129154 state_ref 218370 // State2_2
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 329 242 2005 71 29
+end
+pseudostatecanvas 131202 pseudostate_ref 210178 // initial
+   xyz 424 182 2005
+end
+statecanvas 131714 state_ref 218498 // State2_3
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 471 243 2005 71 29
+end
+pseudostatecanvas 131842 pseudostate_ref 210434 // initial
+   xyz 423 245 2005
+end
+transitioncanvas 128642 transition_ref 214146 // <transition>
+  
+  from ref 128002 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128770 transition_ref 214274 // Menu1
+  decenter_begin 379
+  
+  from ref 128130 z 3006 label "Menu1" xyz 163.5 172.5 3000 to point 150 189
+  line 130306 z 3006 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 128898 transition_ref 214402 // Menu2
+  
+  from ref 128130 z 3006 label "Menu2" xyz 163 235.5 3000 to point 159 253
+  line 129922 z 3006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129282 transition_ref 214530 // <transition>
+  
+  from ref 128386 z 3006 to ref 129026
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129410 transition_ref 214658 // <transition>
+  
+  from ref 128514 z 3006 to ref 129154
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129538 transition_ref 214786 // Cancel
+  
+  from ref 128258 z 2001 label "Cancel" xyz 372 317 3000 to point 413 336
+  line 129794 z 2001 to point 92 336
+  line 129666 z 2001 to ref 128130
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131458 transition_ref 214914 // <transition>
+  decenter_end 517
+  
+  from ref 131202 z 2006 to ref 129026
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131970 transition_ref 215170 // <transition>
+  
+  from ref 131842 z 2006 to ref 131714
+  write_horizontally default show_definition default drawing_language default
+end
+end

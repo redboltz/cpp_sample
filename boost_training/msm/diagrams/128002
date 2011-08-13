@@ -1,6 +1,6 @@
 format 76
 "test" // test
-  revision 14
+  revision 16
   modified_by 2 "kondo"
   // class settings
   //class diagram settings
@@ -611,6 +611,150 @@ format 76
       state 204290 "State2"
 	  uml_on_entry "\"State2::on_entry()\""
 	  uml_on_exit "\"State2::on_exit()\""
+      end
+    end
+
+    state 210818 "22_EntryIsMandatory"
+      stereotype "machine"
+      statediagram 200194 "EntryIsMandatory"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 202882 initial 
+	transition 206850 "<transition>"
+	  on state_ref 210946 // State1
+	  external 
+	end
+      end
+
+      state 210946 "State1"
+	pseudostate 203138 entry_point "Entry2"
+	  transition 207618 "<transition>"
+	    on state_ref 211202 // State1_2
+	    external 
+	  end
+	end
+
+	state 211074 "State1_1"
+	    uml_on_entry "State1_1::entry()"
+	    uml_on_exit "State1_1::exit()"
+	end
+
+	state 211202 "State1_2"
+	    uml_on_entry "State1_2::entry()"
+	    uml_on_exit "State1_2::exit()"
+	end
+
+	pseudostate 203266 initial 
+	  transition 206978 "<transition>"
+	    on state_ref 211074 // State1_1
+	    external 
+	  end
+	end
+
+	transition 207106 "Event3"
+	  on state_ref 211330 // State2
+	  external 
+	end
+      end
+
+      pseudostate 203010 entry_point "Entry1"
+	transition 207490 "<transition>"
+	  on state_ref 211074 // State1_1
+	  external 
+	end
+      end
+
+      state 211330 "State2"
+	transition 207234 "Event1"
+	  on pseudostate_ref 203010 // entry_point
+	  external 
+	end
+
+	transition 207362 "Event2"
+	  on pseudostate_ref 203138 // entry_point
+	  external 
+	end
+      end
+    end
+
+    state 217858 "23_NoNeedInitial"
+      stereotype "machine"
+      statediagram 206722 "NoNeedInitial"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations no shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 209794 initial 
+	transition 214146 "<transition>"
+	  on state_ref 217986 // State1
+	  external 
+	end
+      end
+
+      state 217986 "State1"
+	transition 214274 "Menu1"
+	  on pseudostate_ref 209922 // entry_point
+	  external 
+	end
+
+	transition 214402 "Menu2"
+	  on pseudostate_ref 210050 // entry_point
+	  external 
+	end
+      end
+
+      state 218114 "State2"
+	  uml_on_entry "Light up"
+	  uml_on_exit "Gray out"
+	pseudostate 209922 entry_point "Entry1"
+	  transition 214530 "<transition>"
+	    on state_ref 218242 // State2_1
+	    external 
+	  end
+	end
+
+	transition 214786 "Cancel"
+	  on state_ref 217986 // State1
+	  external 
+	end
+
+	region 134658 "region"
+	  state 218242 "State2_1"
+	  end
+
+	  pseudostate 210178 initial 
+	    transition 214914 "<transition>"
+	      on state_ref 218242 // State2_1
+	      external 
+	    end
+	  end
+	end
+
+	region 134786 "region"
+	  state 218370 "State2_2"
+	  end
+
+	  state 218498 "State2_3"
+	  end
+
+	  pseudostate 210434 initial 
+	    transition 215170 "<transition>"
+	      on state_ref 218498 // State2_3
+	      external 
+	    end
+	  end
+	end
+      end
+
+      pseudostate 210050 entry_point "Entry2"
+	transition 214658 "<transition>"
+	  on state_ref 218370 // State2_2
+	  external 
+	end
       end
     end
   end

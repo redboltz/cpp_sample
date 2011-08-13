@@ -18,13 +18,19 @@ diagrams
     558 367 100 4 0 0
   statediagram_ref 187138 // ChoiceAndElse
     739 719 100 4 0 0
-  active  statediagram_ref 193666 // ExitPointEvent
+  statediagram_ref 193666 // ExitPointEvent
     739 715 100 4 0 0
+  active  statediagram_ref 200194 // EntryIsMandatory
+    739 709 100 4 0 0
+  statediagram_ref 206722 // NoNeedInitial
+    587 572 100 4 0 0
 end
 show_stereotypes
-selected statediagram_ref 193666 // ExitPointEvent
+selected statediagram_ref 200194 // EntryIsMandatory
 open
   state_ref 168194 // 03_InternalAndSelf
-  state_ref 204034 // State1
+  state_ref 210946 // State1
+  region_ref 134658 // region
+  region_ref 134786 // region
 end
 end

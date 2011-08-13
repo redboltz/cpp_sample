@@ -1,53 +1,68 @@
 format 76
 
 pseudostatecanvas 128002 pseudostate_ref 202882 // initial
-   xyz 250 27 2000
+   xyz 207 73 2000
 end
 statecanvas 128130 state_ref 210946 // State1
   show_activities default region_horizontally default drawing_language default show_stereotype_properties default
-  xyzwh 98 87 2000 327 159
+  xyzwh 76 138 2000 281 281
 end
-statecanvas 128258 state_ref 211074 // State1_1
+pseudostatecanvas 128258 pseudostate_ref 203010 // entry_point
+   xyz 343 197 3005 label_xy 357 227
+end
+pseudostatecanvas 128386 pseudostate_ref 203138 // entry_point
+   xyz 344 277 3005 label_xy 362 300
+end
+statecanvas 128514 state_ref 211074 // State1_1
   show_activities default region_horizontally default drawing_language default show_stereotype_properties default
-  xyzwh 175 154 2005 99 35
+  xyzwh 119 176 2005 183 65
 end
-pseudostatecanvas 128386 pseudostate_ref 203010 // initial
-   xyz 215 116 2005
-end
-pseudostatecanvas 128770 pseudostate_ref 203138 // exit_point
-   xyz 214 235 3005 label_xy 236 251
-end
-statecanvas 129154 state_ref 211202 // State2
+statecanvas 128642 state_ref 211202 // State1_2
   show_activities default region_horizontally default drawing_language default show_stereotype_properties default
-  xyzwh 135 326 2000 57 35
+  xyzwh 123 255 2005 183 65
 end
-statecanvas 129282 state_ref 211330 // State3
+statecanvas 128898 state_ref 211330 // State2
   show_activities default region_horizontally default drawing_language default show_stereotype_properties default
-  xyzwh 254 326 2000 57 35
+  xyzwh 469 234 2000 59 29
 end
-transitioncanvas 128514 transition_ref 206850 // <transition>
-  
-  from ref 128386 z 2006 to ref 128258
-  write_horizontally default show_definition default drawing_language default
+pseudostatecanvas 129026 pseudostate_ref 203266 // initial
+   xyz 92 199 2005
 end
-transitioncanvas 128642 transition_ref 206978 // <transition>
+transitioncanvas 128770 transition_ref 206850 // <transition>
   
   from ref 128002 z 2001 to ref 128130
   write_horizontally default show_definition default drawing_language default
 end
-transitioncanvas 128898 transition_ref 207106 // Event1/Action1
+transitioncanvas 129154 transition_ref 206978 // <transition>
   
-  from ref 128258 z 3006 label "Event1/Action1" xyz 230 198.5 3000 to ref 128770
+  from ref 129026 z 2006 to ref 128514
   write_horizontally default show_definition default drawing_language default
 end
-transitioncanvas 129410 transition_ref 207234 // [Action1's result == true]
+transitioncanvas 129282 transition_ref 207106 // Event3
   
-  from ref 128770 z 3006 label "[Action1's result == true]" xyz 57 278 3000 to ref 129154
+  from ref 128130 z 2001 label "Event3" xyz 404 391 3000 to point 354 381
+  line 129538 z 2001 to point 496 381
+  line 129410 z 2001 to ref 128898
   write_horizontally default show_definition default drawing_language default
 end
-transitioncanvas 129538 transition_ref 207362 // [else]
+transitioncanvas 129666 transition_ref 207234 // Event1
   
-  from ref 128770 z 3006 label "[else]" xyz 263 278 3000 to ref 129282
+  from ref 128898 z 3006 label "Event1" xyz 405 203 3000 to ref 128258
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129794 transition_ref 207362 // Event2
+  
+  from ref 128898 z 3006 label "Event2" xyz 409 277 3000 to ref 128386
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 129922 transition_ref 207490 // <transition>
+  
+  from ref 128258 z 3006 to ref 128514
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130050 transition_ref 207618 // <transition>
+  
+  from ref 128386 z 3006 to ref 128642
   write_horizontally default show_definition default drawing_language default
 end
 end

@@ -12,8 +12,9 @@ namespace {
     struct Event1 {};
     struct Event2 {
         Event2() {}
-        template <class Event>
-        Event2(Event const&) {}
+        Event2(Event1 const&) {
+            std::cout << "Event2 constructed from Event1" << std::endl;
+        }
     };
     struct Event3 {};
 
@@ -124,18 +125,13 @@ namespace {
         // No handled event handler
         template <class Fsm,class Event> 
         void no_transition(Event const& e, Fsm& ,int state) {
-            std::cout << "No handled event in State1 " << typeid(e).name() << " on State " << state << std::endl;
+            std::cout << "No handled event in Sm1 " << typeid(e).name() << " on State " << state << std::endl;
         }
+
     };
 
     // back-end
     typedef msm::back::state_machine<Sm1_> Sm1;
-
-    // No handled event handler
-    template <class Fsm,class Event> 
-    void no_transition(Event const& e, Fsm& ,int state) {
-        std::cout << "No handled event in Sm1 " << typeid(e).name() << " on State " << state << std::endl;
-    }
 
     void test()
     {
@@ -177,6 +173,7 @@ int main()
 // > Send Event1
 // State1_1::on_exit()
 // Action1
+// Event2 constructed from Event1
 // State1::on_exit()
 // Action2
 // State2::on_entry()
@@ -184,7 +181,7 @@ int main()
 // State1::on_entry()
 // State1_1::on_entry()
 // > Send Event2
-// No handled event in State1 struct `anonymous namespace'::Event2 on State 0
+// No handled event in Sm1 struct `anonymous namespace'::Event2 on State 0
 // === test case 3 ===
 // State1::on_entry()
 // State1_1::on_entry()
