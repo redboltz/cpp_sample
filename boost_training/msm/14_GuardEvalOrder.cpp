@@ -43,7 +43,7 @@ namespace {
                 msmf::Internal < Event1, msmf::none, Guard1_i_1 >,
                 msmf::Internal < Event1, msmf::none, Guard1_i_2 >
             > {};        
-            // Set eval direction
+
             struct State1_1:msm::front::state<> {
                  // Guards
                 struct Guard1_1_i_1 {
@@ -68,13 +68,10 @@ namespace {
                     msmf::Internal < Event1, msmf::none, Guard1_1_i_1 >,
                     msmf::Internal < Event1, msmf::none, Guard1_1_i_2 >
                 > {};        
-                // Set eval direction
-                //typedef int evaluation_forward;
             };
             struct State1_2:msm::front::state<> {};
             struct State1_3:msm::front::state<> {};
             struct State1_4:msm::front::state<> {};
-            struct State1_5:msm::front::state<> {};
              // Guards
             struct Guard1_1 {
                 template <class Event, class Fsm, class SourceState, class TargetState>
@@ -112,7 +109,7 @@ namespace {
             typedef State1_1 initial_state;
 
             // Set eval direction
-            //typedef int evaluation_forward;
+            typedef int evaluation_forward;
 
             // Transition table
             struct transition_table:mpl::vector<
@@ -128,7 +125,6 @@ namespace {
         struct State2:msm::front::state<> {};
         struct State3:msm::front::state<> {};
         struct State4:msm::front::state<> {};
-        struct State5:msm::front::state<> {};
 
          // Guards
         struct Guard1 {
