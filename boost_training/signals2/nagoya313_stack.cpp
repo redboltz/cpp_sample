@@ -23,13 +23,9 @@ struct hoge {
 typedef boost::signals2::signal<void ()> signal_type;
 signal_type signal;
 
-template <typename T>
-void null_deleter(T* t) {}
-
-
 int main() {
   hoge a(1);
-  boost::shared_ptr<hoge> sa(&a, &null_deleter<hoge>);
+  boost::shared_ptr<hoge> sa(&a, [](hoge *){});
   signal.connect(signal_type::slot_type(&hoge::foo, &*sa).track(sa));
   boost::shared_ptr<hoge> b = std::move(sa);
   sa.reset();
