@@ -1,5 +1,6 @@
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/compressed_sparse_row_graph.hpp>
 #include <list>
 
 void test_list() {
@@ -24,8 +25,9 @@ void test_list() {
 }
 
 void test_graph() {
-	boost::adjacency_list<> g(2);
-    boost::graph_traits<boost::adjacency_list<> >::vertex_iterator ib, ie;
+    typedef boost::adjacency_list<> graph_type;
+	graph_type g(2);
+    boost::graph_traits<graph_type>::vertex_iterator ib, ie;
     {
 	    boost::tie(ib, ie) = boost::vertices(g);
 	    std::cout << *ib++ << std::endl;
@@ -33,16 +35,45 @@ void test_graph() {
     }
     {
 	    boost::tie(ib, ie) = boost::vertices(g);
-        boost::reverse_iterator<boost::graph_traits<boost::adjacency_list<> >::vertex_iterator> rib(ie);
-        boost::reverse_iterator<boost::graph_traits<boost::adjacency_list<> >::vertex_iterator> rie(ib);
+        boost::reverse_iterator<boost::graph_traits<graph_type>::vertex_iterator> rib(ie);
+        boost::reverse_iterator<boost::graph_traits<graph_type>::vertex_iterator> rie(ib);
 
 	    std::cout << *rib++ << std::endl;
 	    std::cout << *rib++ << std::endl;
     }
 }
 
+void test_csr_graph() {
+    typedef boost::compressed_sparse_row_graph<> graph_type;
+	std::pair<int, int> e(0, 1);
+    std::pair<int, int> es[] = { e };
+    graph_type g(boost::edges_are_unsorted, &es[0], &es[1], 2);
+    boost::graph_traits<graph_type>::vertex_iterator ib, ie;
+    {
+	    boost::tie(ib, ie) = boost::vertices(g);
+	    std::cout << *ib++ << std::endl;
+	    std::cout << *ib++ << std::endl;
+    }
+    {
+	    boost::tie(ib, ie) = boost::vertices(g);
+        boost::reverse_iterator<boost::graph_traits<graph_type>::vertex_iterator> rib(ie);
+        boost::reverse_iterator<boost::graph_traits<graph_type>::vertex_iterator> rie(ib);
+
+	    std::cout << *rib++ << std::endl;
+	    std::cout << *rib++ << std::endl;
+    }
+    {
+	    boost::tie(ib, ie) = boost::vertices(g);
+	    std::cout << *--ie << std::endl;
+	    std::cout << *--ie << std::endl;
+    }
+}
+
+
+
 int main() {
     test_list();
     test_graph();
+    test_csr_graph();
 }
 
