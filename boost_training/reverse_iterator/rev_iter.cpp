@@ -2,6 +2,7 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/compressed_sparse_row_graph.hpp>
 #include <list>
+#include <iostream>
 
 void test_list() {
     std::list<int> l;
@@ -30,16 +31,16 @@ void test_graph() {
     boost::graph_traits<graph_type>::vertex_iterator ib, ie;
     {
 	    boost::tie(ib, ie) = boost::vertices(g);
-	    std::cout << *ib++ << std::endl;
-	    std::cout << *ib++ << std::endl;
+	    std::cout << *ib++ << std::endl; // OK
+	    std::cout << *ib++ << std::endl; // OK
     }
     {
 	    boost::tie(ib, ie) = boost::vertices(g);
         boost::reverse_iterator<boost::graph_traits<graph_type>::vertex_iterator> rib(ie);
         boost::reverse_iterator<boost::graph_traits<graph_type>::vertex_iterator> rie(ib);
 
-	    std::cout << *rib++ << std::endl;
-	    std::cout << *rib++ << std::endl;
+	    std::cout << *rib++ << std::endl; // OK
+	    std::cout << *rib++ << std::endl; // OK
     }
 }
 
@@ -59,13 +60,13 @@ void test_csr_graph() {
         boost::reverse_iterator<boost::graph_traits<graph_type>::vertex_iterator> rib(ie);
         boost::reverse_iterator<boost::graph_traits<graph_type>::vertex_iterator> rie(ib);
 
-	    std::cout << *rib++ << std::endl;
-	    std::cout << *rib++ << std::endl;
+	    std::cout << *rib++ << std::endl; // NG Why?
+	    std::cout << *rib++ << std::endl; // NG Why?
     }
     {
 	    boost::tie(ib, ie) = boost::vertices(g);
-	    std::cout << *--ie << std::endl;
-	    std::cout << *--ie << std::endl;
+	    std::cout << *--ie << std::endl;  // OK
+	    std::cout << *--ie << std::endl;  // OK
     }
 }
 
