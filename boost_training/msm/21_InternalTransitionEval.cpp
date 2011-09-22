@@ -38,6 +38,7 @@ namespace {
                         return false;
                     }
                 };
+                typedef int evaluation_forward;
                 // Internal Transition table
                 struct internal_transition_table : mpl::vector<
                     //               Event   Action      Guard
@@ -65,6 +66,7 @@ namespace {
             };
             // Set initial state
             typedef State1_1 initial_state;
+            typedef int evaluation_forward;
 
             // Transition table
             struct transition_table:mpl::vector<
@@ -97,6 +99,7 @@ namespace {
 
         // Set initial state
         typedef State1 initial_state;
+        typedef int evaluation_forward;
 
         // Transition table
         struct transition_table:mpl::vector<
