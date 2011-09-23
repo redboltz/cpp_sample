@@ -1,32 +1,37 @@
 #include <vector>
 #include <boost/ref.hpp>
 
-class Area;
-class Content;
+struct ClsA {};
+struct ClsB {};
 
-class AreaContentPair {
+class ClsAClsBPair {
 public:
-	AreaContentPair(Area& area, Content& content):area_(area), content_(content) {}
-	AreaContentPair(AreaContentPair const& acp):area_(acp.area_), content_(acp.content_) {}
-	Area const& area() const { return area_; }
-	Content const& content() const { return content_; }
-	Area& area() { return area_; }
-	Content& content() { return content_; }
-	friend bool operator< (AreaContentPair const& lhs, AreaContentPair const& rhs) {
-		if (lhs.area_.get_pointer() < rhs.area_.get_pointer()) return true;
-		if (lhs.area_.get_pointer() > rhs.area_.get_pointer()) return false;
-		if (lhs.content_.get_pointer() < rhs.content_.get_pointer()) return true;
+	ClsAClsBPair(ClsA& clsA, ClsB& clsB):clsA_(clsA), clsB_(clsB) {}
+	ClsAClsBPair(ClsAClsBPair const& abp):clsA_(abp.clsA_), clsB_(abp.clsB_) {}
+	ClsA const& clsA() const { return clsA_; }
+	ClsB const& clsB() const { return clsB_; }
+	ClsA& clsA() { return clsA_; }
+	ClsB& clsB() { return clsB_; }
+	friend bool operator< (ClsAClsBPair const& lhs, ClsAClsBPair const& rhs) {
+		if (lhs.clsA_.get_pointer() < rhs.clsA_.get_pointer()) return true;
+		if (lhs.clsA_.get_pointer() > rhs.clsA_.get_pointer()) return false;
+		if (lhs.clsB_.get_pointer() < rhs.clsB_.get_pointer()) return true;
 		return false;
 	}
 private:
-	boost::reference_wrapper<Area> area_;
-	boost::reference_wrapper<Content> content_;
+	boost::reference_wrapper<ClsA> clsA_;
+	boost::reference_wrapper<ClsB> clsB_;
 };
 
 
-struct Area {};
-struct Content {};
+
+typedef std::vector<ClsAClsBPair> AbpCol;
+
+class Hoge {
+	AbpCol col_;
+};
 
 int main() {
-	std::vector<AreaContentPair> m;
+	std::vector<ClsAClsBPair> m;
+	Hoge h;
 }
