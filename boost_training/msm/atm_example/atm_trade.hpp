@@ -45,7 +45,7 @@ namespace Atm {
             }
             EnteringAmount():amount(int()) {}
             int amount;
-            int limit;
+            int balance;
         };
         struct InsufficientFunds:msm::front::state<> 
         {
@@ -60,15 +60,22 @@ namespace Atm {
             template <class Event, class Fsm, class SourceState, class TargetState>
             bool operator()(Event const&, Fsm&, SourceState& s, TargetState&) const 
             {
-                return s.amount <= s.limit;
+                return s.amount <= s.balance;
             }
         };
         // Actions
+        struct SetBalance {
+            template <class Event, class Fsm, class SourceState, class TargetState>
+            void operator()(Event const& e, Fsm&, SourceState&, TargetState& t) const 
+            {
+                t.balance = e.amount;
+            }
+        };
         struct SetAmount {
             template <class Event, class Fsm, class SourceState, class TargetState>
             void operator()(Event const& e, Fsm&, SourceState&, TargetState& t) const 
             {
-                t.limit = e.amount;
+                t.amount = e.amount;
             }
         };
 
@@ -79,16 +86,17 @@ namespace Atm {
         struct transition_table:mpl::vector<
             //          Start                 Event         Next                   Action       Guard
             msmf::Row < Choosing,             Withdraw,     WithdrawAuth::entry_pt
-                                                            <Auth_::Entry>,        msmf::none,  msmf::none >,
+                                                            <Auth_::Entry>,        msmf::none,  msmf::none  >,
             msmf::Row < WithdrawAuth::exit_pt
-                        <Auth_::ExitFail>,    msmf::none,   Choosing,              msmf::none,  msmf::none >,
+                        <Auth_::ExitFail>,    msmf::none,   Choosing,              msmf::none,  msmf::none  >,
             msmf::Row < WithdrawAuth::exit_pt
-                        <Auth_::ExitSuccess>, AccountInfo,  EnteringAmount,        SetAmount,   msmf::none >,
+                        <Auth_::ExitSuccess>, AccountInfo,  EnteringAmount,        SetBalance,  msmf::none  >,
             msmf::Row < Choosing,             Withdraw,     WithdrawAuth::entry_pt
-                                                            <Auth_::Entry>,        msmf::none,  msmf::none >,
-                                                                                   // else                                                             
-            msmf::Row < EnteringAmount,       Ok,           EnteringAmount,        msmf::none,  msmf::none >, 
-            msmf::Row < EnteringAmount,       Ok,           EnteringAmount,        CheckAmount, msmf::none >  
+                                                            <Auth_::Entry>,        msmf::none,  msmf::none  >,
+            msmf::Row < EnteringAmount,       Ok,           InsufficientFunds,     msmf::none,  msmf::none  >, /*else*/
+            msmf::Row < EnteringAmount,       Ok,           Choosing,              msmf::none,  CheckAmount >,  
+            msmf::Row < EnteringAmount,       EnterAmount,  msmf::none,            SetAmount,   msmf::none  >, 
+            msmf::Row < InsufficientFunds,    Ok,           EnteringAmount,        msmf::none,  msmf::none  > 
         > {};
     };
 

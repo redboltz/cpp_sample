@@ -13,13 +13,13 @@ namespace Atm {
     namespace msmf = boost::msm::front;
     namespace mpl = boost::mpl;
 
+    // ----- Events
     struct AuthSuccess;
     struct AccountInfo {
         AccountInfo(int amount_):amount(amount_) {}
         AccountInfo(AuthSuccess const& t);
         int amount;
     };
-    // ----- Events
     struct AuthSuccess {
         AuthSuccess(AccountInfo const& info_):info(info_) {}
         AccountInfo info;
@@ -27,6 +27,7 @@ namespace Atm {
     struct AuthFail {};
     struct AuthTimeout {};
     struct FingerDetect {};
+    struct CardDetect {};
     AccountInfo::AccountInfo(AuthSuccess const& t):amount(t.info.amount) {}
 
     // ----- State machine
@@ -36,7 +37,15 @@ namespace Atm {
         struct Entry       :msm::front::entry_pseudo_state<> {};
         struct ExitSuccess :msm::front::exit_pseudo_state<AccountInfo> {};
         struct ExitFail    :msm::front::exit_pseudo_state<msmf::none> {};
-        struct Waiting:msm::front::state<> 
+        struct WaitingCard:msm::front::state<> 
+        {
+            // Entry action
+            template <class Event,class Fsm>
+            void on_entry(Event const&, Fsm&) const {
+                std::cout << "Please insert your card" << std::endl;
+            }
+        };
+        struct WaitingFinger:msm::front::state<> 
         {
             // Entry action
             template <class Event,class Fsm>
@@ -58,12 +67,14 @@ namespace Atm {
 
         // Transition table
         struct transition_table:mpl::vector<
-            //          Start     Event         Next         Action      Guard
-            msmf::Row < Entry,    msmf::none,   Waiting,     msmf::none, msmf::none >,
-            msmf::Row < Waiting,  FingerDetect, Checking,    msmf::none, msmf::none >,
-            msmf::Row < Waiting,  AuthTimeout,  ExitFail,    msmf::none, msmf::none >,
-            msmf::Row < Checking, AuthSuccess,  ExitSuccess, msmf::none, msmf::none >,
-            msmf::Row < Checking, AuthFail,     ExitFail,    msmf::none, msmf::none >
+            //          Start          Event         Next           Action      Guard
+            msmf::Row < Entry,         msmf::none,   WaitingCard,   msmf::none, msmf::none >,
+            msmf::Row < WaitingCard,   CardDetect,   WaitingFinger, msmf::none, msmf::none >,
+            msmf::Row < WaitingCard,   AuthTimeout,  ExitFail,      msmf::none, msmf::none >,
+            msmf::Row < WaitingFinger, FingerDetect, Checking,      msmf::none, msmf::none >,
+            msmf::Row < WaitingFinger, AuthTimeout,  ExitFail,      msmf::none, msmf::none >,
+            msmf::Row < Checking,      AuthSuccess,  ExitSuccess,   msmf::none, msmf::none >,
+            msmf::Row < Checking,      AuthFail,     ExitFail,      msmf::none, msmf::none >
         > {};
     };
 
