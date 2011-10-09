@@ -23,7 +23,8 @@ struct My {
 };
 
 typedef boost::reference_wrapper<My> MyRw;
-typedef const_reference_wrapper<My> MyConstRw;
+typedef boost::reference_wrapper<My const> MyConstRw;
+typedef const_reference_wrapper<My> MyConstRwEx;
 
 void func(MyRw const& my) {
 	my.get().const_method();
@@ -35,8 +36,14 @@ void const_func(MyConstRw my) {
 	// my.get().method(); // NG
 }
 
+void const_func_ex(MyConstRwEx my) {
+	my.get().const_method();
+	// my.get().method(); // NG
+}
+
 typedef std::vector<MyRw> MyRwCol;
 typedef std::vector<MyConstRw> MyConstRwCol;
+typedef std::vector<MyConstRwEx> MyConstRwExCol;
 
 void func(MyRwCol const& my) {
 	my[0].get().const_method();
@@ -48,13 +55,20 @@ void const_func(MyConstRwCol my) {
 	// my[0].get().method(); // NG
 }
 
+void const_func(MyConstRwExCol my) {
+	my[0].get().const_method();
+	// my[0].get().method(); // NG
+}
+
 int main() {
 	My m1;
 
 	func(boost::ref(m1));
 	// func(boost::cref(m1));             // NG
-	const_func(boost::ref(m1));        // const_reference_wrapper OK
+	// const_func(boost::ref(m1));        // NG
 	const_func(boost::cref(m1));
+	const_func_ex(boost::ref(m1));
+	const_func_ex(boost::cref(m1));
 
 	std::vector<MyRw> vmrw;	
 	// vmrw.push_back(m1);                // NG
@@ -65,10 +79,16 @@ int main() {
 	func(mrc);
 	// const_func(mrc);                   // NG
 
-	MyConstRwCol mrcc;
-	mrcc.push_back(boost::ref(m1));    // const_reference_wrapper OK
-	mrcc.push_back(boost::cref(m1));
-	// func(mrcc);                        // NG
-	const_func(mrcc);
+	MyConstRwCol mcrc;
+	// mcrc.push_back(boost::ref(m1));    // NG  *1
+	mcrc.push_back(boost::cref(m1));
+	// func(mcrc);                        // NG
+	const_func(mcrc);
+
+	MyConstRwExCol mcrec;
+	mcrec.push_back(boost::ref(m1));      // const_reference_wrapper OK *1
+	mcrec.push_back(boost::cref(m1));
+	// func(mcrec);                       // NG
+	const_func(mcrec);
 
 }
