@@ -16,9 +16,12 @@ namespace {
         int val;
     };
     struct Event3 {
-        Event3() {}
         Event3(int val_):val(val_) {}
-        template <class T> Event3(T const& e):val(e.val) {}
+#if 1
+        template <class T> Event3(T const& e):val(e.val) {} // error
+#else
+        Event3(Event2 const& e):val(e.val) {} // OK
+#endif
         int val;
     };
     // ----- State machine
@@ -28,17 +31,15 @@ namespace {
         struct SubSm_:msm::front::state_machine_def<SubSm_>
         {
             // States
-            struct Entry:msm::front::state<> {};
             struct Exit :msm::front::exit_pseudo_state<Event3> {};
-
             struct SubState1:msm::front::state<> {};
+
             // Set initial state
-            typedef Entry initial_state;
+            typedef SubState1 initial_state;
 
             // Transition table
             struct transition_table:mpl::vector<
                 //          Start      Event       Next       Action      Guard
-                msmf::Row < Entry,     msmf::none, SubState1, msmf::none, msmf::none >,
                 msmf::Row < SubState1, Event2,     Exit,      msmf::none, msmf::none >
             > {};
         };
