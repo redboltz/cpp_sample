@@ -91,8 +91,6 @@ namespace Atm {
                         <Auth_::ExitFail>,    msmf::none,   Choosing,              msmf::none,  msmf::none  >,
             msmf::Row < WithdrawAuth::exit_pt
                         <Auth_::ExitSuccess>, AccountInfo,  EnteringAmount,        SetBalance,  msmf::none  >,
-            msmf::Row < Choosing,             Withdraw,     WithdrawAuth::entry_pt
-                                                            <Auth_::Entry>,        msmf::none,  msmf::none  >,
             msmf::Row < EnteringAmount,       Ok,           InsufficientFunds,     msmf::none,  msmf::none  >, /*else*/
             msmf::Row < EnteringAmount,       Ok,           Choosing,              msmf::none,  CheckAmount >,  
             msmf::Row < EnteringAmount,       EnterAmount,  msmf::none,            SetAmount,   msmf::none  >, 
