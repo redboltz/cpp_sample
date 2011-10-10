@@ -9,12 +9,20 @@ namespace {
     namespace msmf = boost::msm::front;
     namespace mpl = boost::mpl;
     // ----- Events
-    struct Event1 {};
+    struct Event1 { int info; };
+#if 0
     struct Event2 {
         Event2() {}
         Event2(Event1 const&) {
             std::cout << "Event2 constructed from Event1" << std::endl;
         }
+    };
+#endif
+    struct Event2 {
+        Event2() {}
+        template <class Event>
+        Event2(Event const& e):info(e.info) {}
+        int info;
     };
     struct Event3 {};
 
