@@ -17,18 +17,17 @@ namespace Atm {
     struct AuthSuccess;
     struct AccountInfo {
         AccountInfo(int amount_):amount(amount_) {}
-        AccountInfo(AuthSuccess const& t);
+        //AccountInfo(AuthSuccess const& t);
         int amount;
     };
-    struct AuthSuccess {
-        AuthSuccess(AccountInfo const& info_):info(info_) {}
-        AccountInfo info;
+	struct AuthSuccess:AccountInfo {
+        AuthSuccess(AccountInfo const& info):AccountInfo(info) {}
     };
     struct AuthFail {};
     struct AuthTimeout {};
     struct FingerDetect {};
     struct CardDetect {};
-    AccountInfo::AccountInfo(AuthSuccess const& t):amount(t.info.amount) {}
+    //AccountInfo::AccountInfo(AuthSuccess const& t):amount(t.info.amount) {}
 
     // ----- State machine
     struct Auth_:msm::front::state_machine_def<Auth_>
