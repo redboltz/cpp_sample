@@ -173,7 +173,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\boost_training\reference_wrapper\rw_col_const.cpp"
+				RelativePath="..\..\..\test\slice\slic.cpp"
 				>
 			</File>
 		</Filter>

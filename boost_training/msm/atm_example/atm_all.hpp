@@ -24,13 +24,26 @@ namespace Atm {
         // States
         struct Waiting:msm::front::state<> 
         {
-            // Entry action
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
+                std::cout << "[DBG] Enter Waiting" << std::endl;
                 std::cout << "Clear Screen" << std::endl;
             }
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) const {
+                std::cout << "[DBG] Exit  Waiting" << std::endl;
+			}
         };
-        struct InService:Trade {};
+        struct InService:Trade {
+            template <class Event,class Fsm>
+            void on_entry(Event const&, Fsm&) const {
+                std::cout << "[DBG] Enter InService" << std::endl;
+            }
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) const {
+                std::cout << "[DBG] Exit  InService" << std::endl;
+			}
+		};
 
         // Set initial state
         typedef Waiting initial_state;
