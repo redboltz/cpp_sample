@@ -31,10 +31,10 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  Choosing" << std::endl;
-			}
+            }
         };
         struct Withdrawing:Withdraw
-		{
+        {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "[DBG] Enter Withdrawing" << std::endl;
@@ -42,8 +42,8 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  Withdrawing" << std::endl;
-			}
-		};
+            }
+        };
 
         // Set initial state
         typedef Choosing initial_state;

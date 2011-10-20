@@ -32,7 +32,7 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  Waiting" << std::endl;
-			}
+            }
         };
         struct InService:Trade {
             template <class Event,class Fsm>
@@ -42,8 +42,8 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  InService" << std::endl;
-			}
-		};
+            }
+        };
 
         // Set initial state
         typedef Waiting initial_state;

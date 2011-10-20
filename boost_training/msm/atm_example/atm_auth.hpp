@@ -19,7 +19,7 @@ namespace Atm {
         AccountInfo(int amount_):balance(amount_) {}
         int balance;
     };
-	struct AuthSuccess:AccountInfo {
+    struct AuthSuccess:AccountInfo {
         AuthSuccess(AccountInfo const& info):AccountInfo(info) {}
     };
     struct AuthFail {};
@@ -45,7 +45,7 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  WaitingFinger" << std::endl;
-			}
+            }
         };
         struct Checking:msm::front::state<> 
         {
@@ -58,7 +58,7 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  Checking" << std::endl;
-			}
+            }
         };
 
         // Set initial state

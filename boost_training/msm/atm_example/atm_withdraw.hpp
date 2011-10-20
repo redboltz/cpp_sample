@@ -28,7 +28,7 @@ namespace Atm {
         // States
         struct Entry      :msm::front::entry_pseudo_state<> {};
         struct EntryByCard:msm::front::entry_pseudo_state<> {};
-		struct Exit       :msm::front::exit_pseudo_state<msmf::none> {};
+        struct Exit       :msm::front::exit_pseudo_state<msmf::none> {};
         struct WaitingCard:msm::front::state<> 
         {
             template <class Event,class Fsm>
@@ -39,10 +39,10 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  WaitingCard" << std::endl;
-			}
+            }
         };
         struct WithdrawAuth:Auth 
-		{
+        {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "[DBG] Enter WithdrawAuth" << std::endl;
@@ -50,8 +50,8 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  WithdrawAuth" << std::endl;
-			}
-		};
+            }
+        };
         struct EnteringAmount:msm::front::state<> 
         {
             // Entry action
@@ -63,7 +63,7 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  EnteringAmount" << std::endl;
-			}
+            }
             EnteringAmount():amount(0), info(0) {}
             int amount;
             AccountInfo info;
@@ -79,7 +79,7 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  InsufficientFunds" << std::endl;
-			}
+            }
         };
         struct DisplayingBalance:msm::front::state<> 
         {
@@ -87,16 +87,16 @@ namespace Atm {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "[DBG] Enter DisplayingBalance" << std::endl;
-				std::cout << "Your balance:" << balance << std::endl;
+                std::cout << "Your balance:" << balance << std::endl;
             }
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
                 std::cout << "[DBG] Exit  DisplayingBalance" << std::endl;
-			}
-			void setBalance(int balance_) {
-				balance = balance_;
-			}
-			int balance;
+            }
+            void setBalance(int balance_) {
+                balance = balance_;
+            }
+            int balance;
         };
         // Guards
         struct CheckAmount {
