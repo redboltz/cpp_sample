@@ -19,7 +19,8 @@ namespace Atm {
     struct HumanAway {};
 
     // ----- State machine
-    struct All_:msm::front::state_machine_def<All_>
+    template <class AuthMethod>
+    struct All_:msm::front::state_machine_def<All_<AuthMethod> >
     {
         // States
         struct Waiting:msm::front::state<> 
@@ -34,7 +35,7 @@ namespace Atm {
                 std::cout << "[DBG] Exit  Waiting" << std::endl;
             }
         };
-        struct InService:Trade {
+        struct InService:Trade<AuthMethod> {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "[DBG] Enter InService" << std::endl;
@@ -57,7 +58,8 @@ namespace Atm {
     };
 
     // Pick a back-end
-    typedef msm::back::state_machine<All_> All;
+    template <class AuthMethod>
+    struct All:msm::back::state_machine<All_<AuthMethod> > {};
 }
 
 #endif // ATM_ALL_HPP

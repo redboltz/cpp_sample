@@ -1,8 +1,9 @@
 #include "atm_all.hpp"
+#include "atm_bio_auth.hpp"
 
 int main()
 {
-    Atm::All t;
+    Atm::All<Atm::BioAuth> t;
     t.start();
     t.process_event(Atm::HumanDetect());
     t.process_event(Atm::ChooseWithdraw());

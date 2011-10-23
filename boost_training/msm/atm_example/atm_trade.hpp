@@ -8,6 +8,7 @@
 #include <boost/msm/front/functor_row.hpp>
 
 #include "atm_withdraw.hpp"
+#include "atm_card_detect.hpp"
 
 namespace Atm {
     namespace msm = boost::msm;
@@ -18,7 +19,8 @@ namespace Atm {
     struct ChooseWithdraw {};
 
     // ----- State machine
-    struct Trade_:msm::front::state_machine_def<Trade_>
+    template <class AuthMethod>
+    struct Trade_:msm::front::state_machine_def<Trade_<AuthMethod> >
     {
         // States
         struct Choosing:msm::front::state<> 
@@ -33,7 +35,7 @@ namespace Atm {
                 std::cout << "[DBG] Exit  Choosing" << std::endl;
             }
         };
-        struct Withdrawing:Withdraw
+        struct Withdrawing:Withdraw<AuthMethod>
         {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
@@ -48,20 +50,21 @@ namespace Atm {
         // Set initial state
         typedef Choosing initial_state;
 
+        typedef typename Withdrawing::template entry_pt<typename Withdraw_<AuthMethod>::Entry>       WithDrawEntry;
+        typedef typename Withdrawing::template entry_pt<typename Withdraw_<AuthMethod>::EntryByCard> WithDrawEntryByCard;
+        typedef typename Withdrawing::template exit_pt <typename Withdraw_<AuthMethod>::Exit>        WithDrawExit;
         // Transition table
         struct transition_table:mpl::vector<
-            //          Start              Event           Next                      Action      Guard
-            msmf::Row < Choosing,          ChooseWithdraw, Withdraw::entry_pt
-                                                           <Withdraw_::Entry>,       msmf::none, msmf::none >,
-            msmf::Row < Choosing,          CardDetect,     Withdraw::entry_pt
-                                                           <Withdraw_::EntryByCard>, msmf::none, msmf::none >,
-            msmf::Row < Withdraw::exit_pt
-                        <Withdraw_::Exit>, msmf::none,     Choosing,                 msmf::none, msmf::none >
+            //          Start         Event           Next                 Action      Guard
+            msmf::Row < Choosing,     ChooseWithdraw, WithDrawEntry,       msmf::none, msmf::none >,
+            msmf::Row < Choosing,     CardDetect,     WithDrawEntryByCard, msmf::none, msmf::none >,
+            msmf::Row < WithDrawExit, msmf::none,     Choosing,            msmf::none, msmf::none >
         > {};
     };
 
     // Pick a back-end
-    typedef msm::back::state_machine<Trade_> Trade;
+    template <class AuthMethod>
+    struct Trade:msm::back::state_machine<Trade_<AuthMethod> > {};
 }
 
 #endif // ATM_TRADE_HPP

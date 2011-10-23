@@ -4,6 +4,8 @@
 #include <boost/msm/front/state_machine_def.hpp>
 #include <boost/msm/front/functor_row.hpp>
 
+#include <boost/mpl/print.hpp>
+
 #define USE_TEMPLATE
 
 // Implementation
@@ -45,13 +47,18 @@ namespace {
 #else
         struct State2:StateImp {};
 #endif
+
+typedef typename mpl::print<
+typename Imp::Derived::Entry
+>::type result;
+        typedef typename Imp::Derived::Entry ide;
         typedef State1 initial_state;
         // Transition table
         struct transition_table:mpl::vector<
             //          Start   Event       Next                 Action      Guard
 #if defined(USE_TEMPLATE)
-            msmf::Row < State1, Event1,     State2::entry_pt
-                                            <StateImp_::Entry>,  msmf::none, msmf::none >
+            msmf::Row < State1, Event1,     typename State2::template entry_pt
+            <typename Imp::Derived::Entry>,  msmf::none, msmf::none >
 #else
             msmf::Row < State1, Event1,     State2::entry_pt
                                             <StateImp_::Entry>,  msmf::none, msmf::none >

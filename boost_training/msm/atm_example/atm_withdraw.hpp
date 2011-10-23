@@ -7,7 +7,8 @@
 #include <boost/msm/front/state_machine_def.hpp>
 #include <boost/msm/front/functor_row.hpp>
 
-#include "atm_auth.hpp"
+#include "atm_account_info.hpp"
+#include "atm_card_detect.hpp"
 
 namespace Atm {
     namespace msm = boost::msm;
@@ -23,7 +24,8 @@ namespace Atm {
     };
 
     // ----- State machine
-    struct Withdraw_:msm::front::state_machine_def<Withdraw_>
+    template <class AuthMethod>
+    struct Withdraw_:msm::front::state_machine_def<Withdraw_<AuthMethod> >
     {
         // States
         struct Entry      :msm::front::entry_pseudo_state<> {};
@@ -41,7 +43,7 @@ namespace Atm {
                 std::cout << "[DBG] Exit  WaitingCard" << std::endl;
             }
         };
-        struct WithdrawAuth:Auth 
+        struct WithdrawAuth:AuthMethod
         {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
@@ -132,28 +134,28 @@ namespace Atm {
         // Set initial state
         typedef Entry initial_state;
 
+        typedef typename WithdrawAuth::template entry_pt<typename AuthMethod::Derived::Entry>       AuthEntry;
+        typedef typename WithdrawAuth::template exit_pt <typename AuthMethod::Derived::ExitFail>    AuthExitFail;
+        typedef typename WithdrawAuth::template exit_pt <typename AuthMethod::Derived::ExitSuccess> AuthExitSuccess;
         // Transition table
         struct transition_table:mpl::vector<
-            //          Start                 Event         Next                   Action          Guard
-            msmf::Row < Entry,                msmf::none,   WaitingCard,           msmf::none,     msmf::none  >,
-            msmf::Row < EntryByCard,          msmf::none,   WithdrawAuth::entry_pt
-                                                            <Auth_::Entry>,        msmf::none,     msmf::none  >,
-            msmf::Row < WaitingCard,          CardDetect,   WithdrawAuth::entry_pt
-                                                            <Auth_::Entry>,        msmf::none,     msmf::none  >,
-            msmf::Row < WithdrawAuth::exit_pt
-                        <Auth_::ExitFail>,    msmf::none,   Exit,                  msmf::none,     msmf::none  >,
-            msmf::Row < WithdrawAuth::exit_pt
-                        <Auth_::ExitSuccess>, AccountInfo,  EnteringAmount,        SetAccountInfo, msmf::none  >,
-            msmf::Row < EnteringAmount,       Ok,           InsufficientFunds,     msmf::none,     msmf::none  >, /*else*/
-            msmf::Row < EnteringAmount,       Ok,           DisplayingBalance,     Pay,            CheckAmount >,  
-            msmf::Row < EnteringAmount,       EnterAmount,  msmf::none,            SetAmount,      msmf::none  >, 
-            msmf::Row < InsufficientFunds,    Ok,           EnteringAmount,        msmf::none,     msmf::none  >, 
-            msmf::Row < DisplayingBalance,    Ok,           Exit,                  msmf::none,     msmf::none  > 
+            //          Start              Event        Next               Action          Guard
+            msmf::Row < Entry,             msmf::none,  WaitingCard,       msmf::none,     msmf::none  >,
+            msmf::Row < EntryByCard,       msmf::none,  AuthEntry,         msmf::none,     msmf::none  >,
+            msmf::Row < WaitingCard,       CardDetect,  AuthEntry,         msmf::none,     msmf::none  >,
+            msmf::Row < AuthExitFail,      msmf::none,  Exit,              msmf::none,     msmf::none  >,
+            msmf::Row < AuthExitSuccess,   AccountInfo, EnteringAmount,    SetAccountInfo, msmf::none  >,
+            msmf::Row < EnteringAmount,    Ok,          InsufficientFunds, msmf::none,     msmf::none  >, /*else*/
+            msmf::Row < EnteringAmount,    Ok,          DisplayingBalance, Pay,            CheckAmount >,  
+            msmf::Row < EnteringAmount,    EnterAmount, msmf::none,        SetAmount,      msmf::none  >, 
+            msmf::Row < InsufficientFunds, Ok,          EnteringAmount,    msmf::none,     msmf::none  >, 
+            msmf::Row < DisplayingBalance, Ok,          Exit,              msmf::none,     msmf::none  > 
         > {};
     };
 
     // Pick a back-end
-    typedef msm::back::state_machine<Withdraw_> Withdraw;
+    template <class AuthMethod>
+    struct Withdraw:msm::back::state_machine<Withdraw_<AuthMethod> > {};
 }
 
 #endif // ATM_WITHDRAW_HPP
