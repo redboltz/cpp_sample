@@ -23,4 +23,9 @@ int main() {
     // fr(&b);
     fcr(&b);
     fv(&b);
+
+	int i = 1;
+	double * const & d = &i;
+	double * pd = &i;
+	double const& rd = i;
 }
