@@ -1,3 +1,5 @@
+// Copyright 2011 Takatoshi Kondo All rights reserved
+
 #include "atm_all.hpp"
 #include "atm_bio_auth.hpp"
 

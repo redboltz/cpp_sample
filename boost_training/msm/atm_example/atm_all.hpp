@@ -1,3 +1,5 @@
+// Copyright 2011 Takatoshi Kondo All rights reserved
+
 #if !defined(ATM_ALL_HPP)
 #define ATM_ALL_HPP
 
