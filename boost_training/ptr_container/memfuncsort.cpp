@@ -1,45 +1,39 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_container.hpp>
+#include <boost/range.hpp>
+#include <boost/range/algorithm.hpp>
 
 #include <algorithm>
 #include <iostream>
 
-int g;
-struct Base {
-	Base():memb(g++){}
-    int memb;
+
+struct My {
+	My():i_(0) {}
+	My(int i):i_(i) {}
+	int i_;
 };
 
-struct Derived:Base {
-	Derived():memd(g++){}
-	int memd;
-};
+typedef boost::ptr_vector<My, boost::view_clone_allocator> PV;
 
-Base *p1;
-Base *p2;
+void foo(PV const& pv) {
+	PV tmp;
+	//tmp.front() = pv.front();
+	//tmp.push_back(&pv.front());
+	My const &mc1 = pv[0];
+	PV tmp2 = pv;
+	My const &mc2 = tmp2[0];
 
-struct Comp:std::binary_function<Base const&, Base const&, bool> {
-    bool operator()(Base const& lhs, Base const& rhs) const {
-        std::cout << "&lhs = " << &lhs << std::endl;
-        std::cout << "&rhs = " << &rhs << std::endl;
-//        assert(
-//            (&lhs == p1 && &rhs == p2) ||
-//            (&lhs == p2 && &rhs == p1));
-        return &lhs < &rhs;
-    }
-};
+	boost::range::copy(pv, boost::ptr_container::ptr_back_inserter(tmp));
+	//pv[0] = My();
+	My const &mc3 = tmp[0];
+	tmp[0] = My(1);
+	My const &mc4 = tmp[0];
+	My const &mc5 = pv[0];
+}
 
 int main() {
-    boost::ptr_vector<Base> v;
-    boost::ptr_vector<Base> r;
-    v.push_back(p1 = new Base);
-    v.push_back(p2 = new Derived);
-    std::cout << "p1 = " << p1 << std::endl;
-    std::cout << "p2 = " << p2 << std::endl;
-
-    std::cout << "member sort" << std::endl;
-    v.sort(Comp());
-	std::set_intersection(v.begin(), v.end(), v.begin(), v.end(), boost::ptr_container::ptr_back_inserter(r), Comp());
-    std::cout << "std::sort" << std::endl;
-    std::sort(v.begin(), v.end(), Comp());
+	PV pv;
+	My m(2);
+	pv.push_back(&m);
+	foo(pv);
 }
