@@ -1,3 +1,5 @@
+// Copyright 2011 Takatoshi Kondo All rights reserved
+
 #if !defined(ATM_ALL_HPP)
 #define ATM_ALL_HPP
 
@@ -19,18 +21,32 @@ namespace Atm {
     struct HumanAway {};
 
     // ----- State machine
-    struct All_:msm::front::state_machine_def<All_>
+    template <class AuthMethod>
+    struct All_:msm::front::state_machine_def<All_<AuthMethod> >
     {
         // States
         struct Waiting:msm::front::state<> 
         {
-            // Entry action
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
+                std::cout << "[DBG] Enter Waiting" << std::endl;
                 std::cout << "Clear Screen" << std::endl;
             }
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) const {
+                std::cout << "[DBG] Exit  Waiting" << std::endl;
+            }
         };
-        struct InService:Trade {};
+        struct InService:Trade<AuthMethod> {
+            template <class Event,class Fsm>
+            void on_entry(Event const&, Fsm&) const {
+                std::cout << "[DBG] Enter InService" << std::endl;
+            }
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) const {
+                std::cout << "[DBG] Exit  InService" << std::endl;
+            }
+        };
 
         // Set initial state
         typedef Waiting initial_state;
@@ -44,7 +60,8 @@ namespace Atm {
     };
 
     // Pick a back-end
-    typedef msm::back::state_machine<All_> All;
+    template <class AuthMethod>
+    struct All:msm::back::state_machine<All_<AuthMethod> > {};
 }
 
 #endif // ATM_ALL_HPP

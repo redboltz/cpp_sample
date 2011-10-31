@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\usr\lib\boost\git_svn_clone\boost-svn"
+				AdditionalIncludeDirectories="$(BOOSTPATH)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -183,15 +183,27 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\..\..\boost_training\msm\atm_example\atm_account_info.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\boost_training\msm\atm_example\atm_all.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost_training\msm\atm_example\atm_auth.hpp"
+				RelativePath="..\..\..\boost_training\msm\atm_example\atm_bio_auth.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\boost_training\msm\atm_example\atm_card_detect.hpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\boost_training\msm\atm_example\atm_trade.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\boost_training\msm\atm_example\atm_withdraw.hpp"
 				>
 			</File>
 		</Filter>
