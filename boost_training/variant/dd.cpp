@@ -45,18 +45,7 @@ struct DD_AB : boost::static_visitor<> {
 				>::type 
 			> 
 		>::type* = 0) const {}
-	template <class T, class U>
-	void operator()(T const&, U const&, 
-		typename boost::disable_if<
-			boost::mpl::and_<
-				typename boost::is_base_of<
-					A, typename T::type
-				>::type, 
-				typename boost::is_base_of<
-					B, typename U::type
-				>::type 
-			> 
-		>::type* = 0) const {}
+	void operator()(...) const {}
 };
 
 int main() {
