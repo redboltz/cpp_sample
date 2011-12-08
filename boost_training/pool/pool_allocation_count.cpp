@@ -11,61 +11,56 @@
 
 void* operator new(std::size_t s) {
     void* p = malloc(s);
-    std::cout <<"new mem = " << p << " req size = " << s << std::endl;
+    std::cout <<"global new mem = " << p << " req size = " << s << std::endl;
     return p;
 }
 
 void operator delete(void* p) {
-    std::cout << "delete mem = " << p << std::endl;
+    std::cout << "global delete mem = " << p << std::endl;
     free(p);
 }
 
 void* operator new[](std::size_t s) {
     void* p = malloc(s);
-    std::cout <<"new[] mem = " << p << " req size = " << s << std::endl;
+    std::cout <<"global new[] mem = " << p << " req size = " << s << std::endl;
     return p;
 }
 
 void operator delete[](void* p) {
-    std::cout << "delete[] mem = " << p << std::endl;
+    std::cout << "global delete[] mem = " << p << std::endl;
     free(p);
 }
 
 struct My {
-    My(int x_, int y_, int color_):x(x_), y(y_), color(color_) {}
-	~My() { std::cout << "destruct" << std::endl; }
+    My(int x_, int y_, int color_):x(x_), y(y_), color(color_) {
+        std::cout << "My construct:" << this << std::endl; 
+    }
+    ~My() { 
+        std::cout << "My destruct:" << this << std::endl; 
+    }
     int x;
     int y;
     int color;
 };
 
-void test1() {
-    std::cout << "Test1" << std::endl;
-    std::cout << "boost::shared_ptr<My> p(new My(1, 3, 42))" << std::endl;
-    {
-        boost::shared_ptr<My> p(new My(1, 3, 42));
-    }
-    std::cout << "boost::shared_ptr<My> p = boost::make_shared<My>(1, 3, 42)" << std::endl;
-    {
-        boost::shared_ptr<My> p = boost::make_shared<My>(1, 3, 42);
-    }
-}
 
 template <std::size_t size>
 struct fixed_array_allocator {
-	typedef std::size_t size_type;
-	typedef std::ptrdiff_t difference_type;
+    typedef std::size_t size_type;
+    typedef std::ptrdiff_t difference_type;
 
-	static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes) {
-		std::size_t alignedSize = ((bytes - 1) / sizeof(int) + 1) * sizeof(int);
-		char *p = &mem[position];
-		position += alignedSize;
-		return p;
-	}
-	static void free BOOST_PREVENT_MACRO_SUBSTITUTION(char * const block) {
-	}
-	static char mem[size];
-	static std::size_t position;
+    static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes) {
+        std::size_t alignedSize = ((bytes - 1) / sizeof(int) + 1) * sizeof(int);
+        char *p = &mem[position];
+        std::cout <<"fixed new mem = " << reinterpret_cast<void*>(p) << " req size = " << bytes << std::endl;
+        position += alignedSize;
+        return p;
+    }
+    static void free BOOST_PREVENT_MACRO_SUBSTITUTION(char * const block) {
+    std::cout << "fixed delete mem = " << reinterpret_cast<void*>(block) << std::endl;
+    }
+    static char mem[size];
+    static std::size_t position;
 };
 
 template <std::size_t size> std::size_t 
@@ -73,12 +68,14 @@ fixed_array_allocator<size>::position = 0;
 template <std::size_t size> char
 fixed_array_allocator<size>::mem[size];
 
-void test2() {
-    std::cout << "Test2" << std::endl;
+void test() {
+    std::cout << "Test" << std::endl;
     std::cout << "sizeof(My) = " << sizeof(My) << std::endl;
-    typedef boost::pool_allocator<My, fixed_array_allocator<1000>, boost::details::pool::default_mutex, 10> my_alloc;
-    std::cout << "boost::shared_ptr<My> p = boost::make_shared<My>(1, 3, 42)" << std::endl;
+
+    boost::pool_allocator<My, fixed_array_allocator<1000>, boost::details::pool::default_mutex, 10> a;
+    std::cout << "Start" << std::endl;
     {
+        boost::shared_ptr<My> p1 = boost::allocate_shared<My>(a, 1, 3, 42);
 		std::list<My, my_alloc> l;
 
         l.push_back(My(1, 2, 3));
@@ -121,11 +118,9 @@ void test2() {
         boost::shared_ptr<My> p10 = boost::allocate_shared<My>(a, 1, 3, 42);
 #endif
     }
-	//boost::singleton_pool<boost::pool_allocator_tag, sizeof(My)>::release_memory();
 }
 
 
 int main() {
-    //test1();
-    test2();
+    test();
 }

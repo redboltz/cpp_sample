@@ -61,7 +61,8 @@ namespace Atm {
 
     // Pick a back-end
     template <class AuthMethod>
-    struct All:msm::back::state_machine<All_<AuthMethod> > {};
+    using All = msm::back::state_machine<All_<AuthMethod>>;
+    //struct All:msm::back::state_machine<All_<AuthMethod> > {};
 }
 
 #endif // ATM_ALL_HPP
