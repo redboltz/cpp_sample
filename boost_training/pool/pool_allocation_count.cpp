@@ -1,4 +1,5 @@
 #include <iostream>
+#include <list>
 
 #include <cstdlib>
 
@@ -75,11 +76,28 @@ fixed_array_allocator<size>::mem[size];
 void test2() {
     std::cout << "Test2" << std::endl;
     std::cout << "sizeof(My) = " << sizeof(My) << std::endl;
-
-	boost::pool_allocator<My, fixed_array_allocator<1000>, boost::details::pool::default_mutex, 10> a;
+    typedef boost::pool_allocator<My, fixed_array_allocator<1000>, boost::details::pool::default_mutex, 10> my_alloc;
     std::cout << "boost::shared_ptr<My> p = boost::make_shared<My>(1, 3, 42)" << std::endl;
     {
-        boost::shared_ptr<My> p1 = boost::allocate_shared<My>(a, 1, 3, 42);
+		std::list<My, my_alloc> l;
+
+        l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
+
+        l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
+
+		l.push_back(My(1, 2, 3));
+    }
+    {
+        boost::shared_ptr<My> p1 = boost::allocate_shared<My>(my_alloc(), 1, 3, 42);
+        boost::shared_ptr<My> p2 = boost::allocate_shared<My>(my_alloc(), 1, 3, 42);
+#if 0
         boost::shared_ptr<My> p2 = boost::allocate_shared<My>(a, 1, 3, 42);
         boost::shared_ptr<My> p3 = boost::allocate_shared<My>(a, 1, 3, 42);
         boost::shared_ptr<My> p4 = boost::allocate_shared<My>(a, 1, 3, 42);
@@ -101,6 +119,7 @@ void test2() {
         boost::shared_ptr<My> p8 = boost::allocate_shared<My>(a, 1, 3, 42);
         boost::shared_ptr<My> p9 = boost::allocate_shared<My>(a, 1, 3, 42);
         boost::shared_ptr<My> p10 = boost::allocate_shared<My>(a, 1, 3, 42);
+#endif
     }
 	//boost::singleton_pool<boost::pool_allocator_tag, sizeof(My)>::release_memory();
 }
