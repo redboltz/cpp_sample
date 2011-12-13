@@ -42,6 +42,18 @@ struct    analytical_function_cases
           >
 {};
 
+template<>
+struct    analytical_function_cases
+        ::case_< boost::proto::tag::plus >
+        : boost::proto::plus<analytical_function,analytical_function>
+{};
+
+template<>
+struct    analytical_function_cases
+        ::case_<boost::proto::tag::multiplies>
+        : boost::proto::multiplies<analytical_function,analytical_function>
+{};
+
 //----------------------------------------------------------------------
 
 struct fetch_variable : boost::proto::callable
@@ -245,6 +257,30 @@ struct    derivate_cases
           >
 {};
 
+template<>
+struct    derivate_cases
+        ::case_< boost::proto::tag::multiplies >
+        : boost::proto::when
+          < boost::proto::plus< derivate_cases, derivate_cases >
+          , boost::proto::functional::make_plus
+#if 0
+            ( derivate_(boost::proto::_left)
+            , derivate_(boost::proto::_right)
+            )
+#else
+            ( boost::proto::functional::make_multiplies
+              ( boost::proto::_left
+              , derivate_(boost::proto::_right)
+              )
+            , boost::proto::functional::make_multiplies
+              ( derivate_(boost::proto::_left)
+              , boost::proto::_right
+              )
+            )
+#endif
+          >
+{};
+
 template<int N>
 struct nth_derivative
 {
@@ -305,5 +341,6 @@ derivate( Function const& f, Variable const& v )
 //----------------------------------------------------------------------
 
 int main() {
-  std::cout << derivate( _x, _x )(1.5)         << "\n";
+  std::cout << derivate( _x + _x, _x )(1.5)         << "\n";
+  std::cout << derivate( _x * _x, _x )(1.5)         << "\n";
 }
