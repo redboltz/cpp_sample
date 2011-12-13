@@ -262,23 +262,23 @@ struct    derivate_cases
         ::case_< boost::proto::tag::multiplies >
         : boost::proto::when
           < boost::proto::plus< derivate_cases, derivate_cases >
-          , boost::proto::functional::make_plus
-#if 0
-            ( derivate_(boost::proto::_left)
-            , derivate_(boost::proto::_right)
-            )
-#else
-            ( boost::proto::functional::make_multiplies
-              ( boost::proto::_left
-              , derivate_(boost::proto::_right)
+          , boost::proto::call<
+              boost::proto::functional::make_plus
+              ( boost::proto::call<
+                  boost::proto::functional::make_multiplies
+                  ( boost::proto::_left
+                  , boost::proto::call<derivate_(boost::proto::_right)>
+                  )
+                >
+              , boost::proto::call<
+                  boost::proto::functional::make_multiplies
+                  ( boost::proto::call<derivate_(boost::proto::_left)>
+                  , boost::proto::_right
+                  )
+                >
               )
-            , boost::proto::functional::make_multiplies
-              ( derivate_(boost::proto::_left)
-              , boost::proto::_right
-              )
-            )
-#endif
-          >
+            >
+	  >
 {};
 
 template<int N>
