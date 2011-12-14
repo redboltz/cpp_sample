@@ -15,12 +15,10 @@
 #include <boost/proto/make_expr.hpp>
 #include <boost/proto/proto_fwd.hpp>
 
-#include <functional>
-
-#include <boost/mpl/arithmetic.hpp>
-#include <boost/mpl/size_t.hpp>
-
+// 変数用タグの定義
 struct variable_tag {};
+
+// Grammerの定義
 struct  analytical_function
 	: boost::proto::or_<
 		boost::proto::terminal< variable_tag >, 
@@ -37,6 +35,7 @@ struct  analytical_function
 	>
 	{};
 
+// Grammerのチェック関数
 template<class Expression> inline void
 check_for_match( Expression const& xpr )
 {
@@ -51,47 +50,51 @@ check_for_match( Expression const& xpr )
 		<< "the analytical_function grammar\n";
 }
 
-template <typename T, typename U>
-struct my_plus : boost::proto::callable {
-	typedef T result_type;
-};
+// Custom operator
 
-struct dplus : std::plus<double>, boost::proto::callable {};
-
-struct dplus2 : boost::proto::callable {
+// struct dplus : std::plus<double>, boost::proto::callable {};
+struct dplus : boost::proto::callable {
 	typedef double result_type;
 	double operator()(double lhs, double rhs) const {
 		return lhs + rhs;
 	}
 };
 
+// Evaluator
 struct  evaluate_
 	: boost::proto::or_<
+		// 変数
 		boost::proto::when< 
 			boost::proto::terminal< variable_tag >, 
 			boost::proto::_state
 		>, 
+		// 変数以外のterminal (つまり定数）
 		boost::proto::when< 
 			boost::proto::terminal< boost::proto::_ >, 
 			boost::proto::_value
 		>, 
+		// + 演算子
 		boost::proto::when< 
 			boost::proto::plus < 
 				evaluate_,
 				evaluate_
 			>,
-			dplus2(
+			dplus(
 				evaluate_(boost::proto::_left),
 				evaluate_(boost::proto::_right)
 			)
 		>, 
+		// それ以外はC++のルールに従う
 		boost::proto::otherwise< boost::proto::_default<evaluate_> >
 	>
 	{};
 
+
+// analytical_domainのための先行宣言
 template<typename AST>
 struct analytical_expression;
 
+// functionとexpressionの関連づけ
 struct analytical_domain
 	: boost::proto::domain< 
 		boost::proto::generator<analytical_expression>, 
@@ -99,9 +102,10 @@ struct analytical_domain
 	>
 {};
 
+// expressionの定義
 template<typename AST>
 struct analytical_expression
-	: boost::proto::extends<AST,analytical_expression<AST>,analytical_domain> {
+	: boost::proto::extends<AST, analytical_expression<AST>, analytical_domain> {
 	typedef boost::proto::
 	      extends<AST, analytical_expression<AST>, analytical_domain> extendee;
 
