@@ -267,18 +267,18 @@ struct    derivate_cases
               ( boost::proto::call<
                   boost::proto::functional::make_multiplies
                   ( boost::proto::_left
-                  , boost::proto::call<derivate_(boost::proto::_right)>
+                  , derivate_(boost::proto::_right)
                   )
                 >
               , boost::proto::call<
                   boost::proto::functional::make_multiplies
-                  ( boost::proto::call<derivate_(boost::proto::_left)>
+                  ( derivate_(boost::proto::_left)
                   , boost::proto::_right
                   )
                 >
               )
             >
-	  >
+	      >
 {};
 
 template<int N>
