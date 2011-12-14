@@ -10,28 +10,32 @@
  ******************************************************************************/
 
 #include <iostream>
+#include <boost/format.hpp>
+
 #include <boost/array.hpp>
 #include <boost/proto/proto.hpp>
 #include <boost/proto/make_expr.hpp>
 #include <boost/proto/proto_fwd.hpp>
+
+namespace proto = boost::proto;
 
 // 変数用タグの定義
 struct variable_tag {};
 
 // Grammerの定義
 struct  analytical_function
-	: boost::proto::or_<
-		boost::proto::terminal< variable_tag >, 
-		boost::proto::or_< 
-			boost::proto::terminal< int >, 
-			boost::proto::terminal< float >, 
-			boost::proto::terminal< double >
+	: proto::or_<
+		proto::terminal< variable_tag >, 
+		proto::or_< 
+			proto::terminal< int >, 
+			proto::terminal< float >, 
+			proto::terminal< double >
 		>, 
-		boost::proto::plus<analytical_function, analytical_function>, 
-		boost::proto::negate<analytical_function>, 
-		boost::proto::minus<analytical_function, analytical_function>, 
-		boost::proto::multiplies<analytical_function, analytical_function>, 
-		boost::proto::divides<analytical_function, analytical_function>
+		proto::plus<analytical_function, analytical_function>, 
+		proto::negate<analytical_function>, 
+		proto::minus<analytical_function, analytical_function>, 
+		proto::multiplies<analytical_function, analytical_function>, 
+		proto::divides<analytical_function, analytical_function>
 	>
 	{};
 
@@ -39,11 +43,11 @@ struct  analytical_function
 template<class Expression> inline void
 check_for_match( Expression const& xpr )
 {
-	boost::proto::display_expr(xpr);
-
-	// The meta-check
+	// 式の表示
+	proto::display_expr(xpr);
+	// 式のチェック
 	std::cout
-		<<  ( boost::proto::matches<Expression, analytical_function>::value
+		<<  ( proto::matches<Expression, analytical_function>::value
 			? "matches " 
 			: "doesn't match "
 			)
@@ -52,40 +56,45 @@ check_for_match( Expression const& xpr )
 
 // Custom operator
 
-// struct dplus : std::plus<double>, boost::proto::callable {};
-struct dplus : boost::proto::callable {
+// こんな風にstd::plusの再利用もできる
+// struct dplus : std::plus<double>, proto::callable {};
+
+// 自前で作ってみる
+struct dplus : proto::callable {
 	typedef double result_type;
 	double operator()(double lhs, double rhs) const {
+		std::cout << boost::format("custom plus called!! %1% + %2%\n") % lhs % rhs;
 		return lhs + rhs;
 	}
 };
 
 // Evaluator
 struct  evaluate_
-	: boost::proto::or_<
+	: proto::or_<
 		// 変数
-		boost::proto::when< 
-			boost::proto::terminal< variable_tag >, 
-			boost::proto::_state
+		proto::when< 
+			proto::terminal< variable_tag >, 
+			proto::_state
 		>, 
 		// 変数以外のterminal (つまり定数）
-		boost::proto::when< 
-			boost::proto::terminal< boost::proto::_ >, 
-			boost::proto::_value
+		proto::when< 
+			proto::terminal< proto::_ >, 
+			proto::_value
 		>, 
 		// + 演算子
-		boost::proto::when< 
-			boost::proto::plus < 
-				evaluate_,
-				evaluate_
+		proto::when< 
+			proto::plus < 
+				proto::_,
+				proto::_
 			>,
+			// ここを自前の演算子で実現してみる
 			dplus(
-				evaluate_(boost::proto::_left),
-				evaluate_(boost::proto::_right)
+				evaluate_(proto::_left),
+				evaluate_(proto::_right)
 			)
 		>, 
 		// それ以外はC++のルールに従う
-		boost::proto::otherwise< boost::proto::_default<evaluate_> >
+		proto::otherwise< proto::_default<evaluate_> >
 	>
 	{};
 
@@ -96,8 +105,8 @@ struct analytical_expression;
 
 // functionとexpressionの関連づけ
 struct analytical_domain
-	: boost::proto::domain< 
-		boost::proto::generator<analytical_expression>, 
+	: proto::domain< 
+		proto::generator<analytical_expression>, 
 		analytical_function
 	>
 {};
@@ -105,8 +114,8 @@ struct analytical_domain
 // expressionの定義
 template<typename AST>
 struct analytical_expression
-	: boost::proto::extends<AST, analytical_expression<AST>, analytical_domain> {
-	typedef boost::proto::
+	: proto::extends<AST, analytical_expression<AST>, analytical_domain> {
+	typedef proto::
 	      extends<AST, analytical_expression<AST>, analytical_domain> extendee;
 
 	analytical_expression(AST const& ast = AST()) : extendee(ast) {}
@@ -117,14 +126,15 @@ struct analytical_expression
 
 	result_type operator()(double v0) const {
 		evaluate_ callee;
-		return callee(*this,v0);
+		return callee(*this, v0);
 	}
 };
 
-analytical_expression< boost::proto::terminal< variable_tag >::type > const _x;
+// placeholderの定義。この方式だと、まだ1つしか定義できない。
+analytical_expression< proto::terminal< variable_tag >::type > const _x;
 
 int main()
 {
 	std::cout << (_x + (2+_x))(5) << "\n";
-	std::cout << (_x * 4)(3) << "\n";
+	std::cout << (_x * 6)(8) << "\n";
 }
