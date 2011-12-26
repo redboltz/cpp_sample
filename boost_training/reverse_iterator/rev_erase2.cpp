@@ -1,5 +1,6 @@
 #include <set>
 #include <cassert>
+#include <boost/config.hpp>
 
 int main() {
     typedef std::set<int> intset_t;
@@ -13,13 +14,13 @@ int main() {
     intset_t::reverse_iterator end = s.rend();
     while (ri != end) {
         if (*ri == 2) {
-            // riが適切に進んでいると思う。VC++ではランタイムエラーになるのはなぜ？
-#if 1
-            s.erase((++ri).base()++); // VC runtime error, g++ OK
-#else
-            // VC++でもg++でも動くが、riは無効でたまたま実装が次（前）要素を指しているだけでは？
-            s.erase(--ri.base()); // VC, g++ OK 
-#endif
+#if defined(BOOST_MSVC)
+            intset_t::iterator tmpIt = s.erase(--ri.base()); // VC
+			ri = intset_t::reverse_iterator(tmpIt);
+			assert(*ri == 1);
+#else  // BOOST_MSVC
+            s.erase((++ri).base()); // VC runtime error, g++ OK
+#endif // BOOST_MSVC
         }
         else {
             ++ri;
