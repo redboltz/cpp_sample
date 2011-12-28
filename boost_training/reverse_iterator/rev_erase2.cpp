@@ -1,6 +1,5 @@
 #include <set>
 #include <cassert>
-#include <boost/config.hpp>
 
 int main() {
     typedef std::set<int> intset_t;
