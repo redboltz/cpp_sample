@@ -22,9 +22,10 @@ int main() {
             //           ri base   
             //     | 1 | 2 | 3 |   
             //
-            intset_t::iterator tmpIt = --ri.base();
-            s.erase(tmpIt++);
-            //ri = intset_t::reverse_iterator(tmpIt);
+
+            //intset_t::iterator tmpIt = --ri.base();
+            //s.erase(tmpIt++);
+            s.erase((--ri.base())++);
             assert(*ri == 1);
         }
         else {
