@@ -23,14 +23,10 @@ int main() {
             //           ri base   
             //     | 1 | 2 | 3 |   
             //
-#if defined(BOOST_MSVC)
-            intset_t::iterator tmpIt = s.erase(--ri.base()); // VC
+            intset_t::iterator tmpIt = --ri.base();
+            s.erase(tmpIt++);
             ri = intset_t::reverse_iterator(tmpIt);
             assert(*ri == 1);
-#else  // BOOST_MSVC
-            s.erase((++ri).base()); // VC runtime error, g++ OK
-            assert(*ri == 1);
-#endif // BOOST_MSVC
         }
         else {
             ++ri;
