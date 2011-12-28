@@ -25,7 +25,7 @@ int main() {
             //
             intset_t::iterator tmpIt = --ri.base();
             s.erase(tmpIt++);
-            ri = intset_t::reverse_iterator(tmpIt);
+            //ri = intset_t::reverse_iterator(tmpIt);
             assert(*ri == 1);
         }
         else {
