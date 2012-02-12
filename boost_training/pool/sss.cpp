@@ -8,6 +8,7 @@
 
 #include <boost/pool/pool_alloc.hpp>
 #include <boost/pool/object_pool.hpp>
+#include <boost/pool/simple_segregated_storage.hpp>
 
 void* operator new(std::size_t s) {
     void* p = malloc(s);
@@ -68,33 +69,52 @@ fixed_array_allocator<size>::position = 0;
 template <std::size_t size> char
 fixed_array_allocator<size>::mem[size];
 
+struct MySss :  boost::simple_segregated_storage<std::size_t> 
+{
+	typedef std::ptrdiff_t difference_type;
+	static void free(void*) 
+	{
+	}
+	
+};
+
+
 void test() {
     std::cout << "Test" << std::endl;
     std::cout << "sizeof(My) = " << sizeof(My) << std::endl;
 
-    boost::pool_allocator<My, fixed_array_allocator<1000>, boost::details::pool::default_mutex, 10> a;
+	MySss s;
+	s.malloc();
+	
+    typedef boost::pool_allocator<My, MySss> alloc_type;
+
+	alloc_type a;
+#if 0
     std::cout << "Start" << std::endl;
     {
         boost::shared_ptr<My> p1 = boost::allocate_shared<My>(a, 1, 3, 42);
-		std::list<My, my_alloc> l;
+		std::list<My, alloc_type> l;
+
+        l.push_back(My(1, 2, 3));
+#if 0
+		l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
+		l.push_back(My(1, 2, 3));
 
         l.push_back(My(1, 2, 3));
 		l.push_back(My(1, 2, 3));
 		l.push_back(My(1, 2, 3));
 		l.push_back(My(1, 2, 3));
-
-        l.push_back(My(1, 2, 3));
-		l.push_back(My(1, 2, 3));
-		l.push_back(My(1, 2, 3));
-		l.push_back(My(1, 2, 3));
 		l.push_back(My(1, 2, 3));
 
 		l.push_back(My(1, 2, 3));
+#endif
     }
     {
+#if 0
         boost::shared_ptr<My> p1 = boost::allocate_shared<My>(my_alloc(), 1, 3, 42);
         boost::shared_ptr<My> p2 = boost::allocate_shared<My>(my_alloc(), 1, 3, 42);
-#if 0
+#endif
         boost::shared_ptr<My> p2 = boost::allocate_shared<My>(a, 1, 3, 42);
         boost::shared_ptr<My> p3 = boost::allocate_shared<My>(a, 1, 3, 42);
         boost::shared_ptr<My> p4 = boost::allocate_shared<My>(a, 1, 3, 42);
@@ -116,8 +136,8 @@ void test() {
         boost::shared_ptr<My> p8 = boost::allocate_shared<My>(a, 1, 3, 42);
         boost::shared_ptr<My> p9 = boost::allocate_shared<My>(a, 1, 3, 42);
         boost::shared_ptr<My> p10 = boost::allocate_shared<My>(a, 1, 3, 42);
-#endif
     }
+#endif
 }
 
 
