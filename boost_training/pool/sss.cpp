@@ -8,6 +8,7 @@
 
 #include <boost/pool/pool_alloc.hpp>
 #include <boost/pool/object_pool.hpp>
+#include <boost/pool/singleton_pool.hpp>
 #include <boost/pool/simple_segregated_storage.hpp>
 
 void* operator new(std::size_t s) {
@@ -44,6 +45,22 @@ struct My {
     int color;
 };
 
+template <class tag, class num_of_obj, class size = std::size_t, >
+class sss_allocator {
+public:
+    typedef std::size_t size_type;
+    typedef std::ptrdiff_t difference_type;
+
+	sss_allocator() {
+		sss_.add_block
+	}
+    static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes) {
+	}
+
+private:
+	typedef boost::simple_segregated_storage<size> sss_type;
+	static sss_type sss_;
+};
 
 template <std::size_t size>
 struct fixed_array_allocator {
@@ -69,22 +86,22 @@ fixed_array_allocator<size>::position = 0;
 template <std::size_t size> char
 fixed_array_allocator<size>::mem[size];
 
-struct MySss :  boost::simple_segregated_storage<std::size_t> 
+struct sss_with_difftype :  boost::simple_segregated_storage<std::size_t> 
 {
 	typedef std::ptrdiff_t difference_type;
-	static void free(void*) 
-	{
-	}
-	
 };
+
+struct MyTag {};
+	
+typedef boost::singleton_pool<MyTag, 16, sss_with_difftype> MySss;
 
 
 void test() {
     std::cout << "Test" << std::endl;
     std::cout << "sizeof(My) = " << sizeof(My) << std::endl;
 
-	MySss s;
-	s.malloc();
+	//MySss s;
+	//s.malloc();
 	
     typedef boost::pool_allocator<My, MySss> alloc_type;
 
