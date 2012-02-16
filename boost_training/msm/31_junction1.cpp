@@ -16,9 +16,9 @@ namespace {
     };
 
     // ----- State machine
-    struct Sm1_:msm::front::state_machine_def<Sm1_>
+    struct Sm1_:msmf::state_machine_def<Sm1_>
     {
-        struct State1_:msm::front::state_machine_def<State1_>{};
+        struct State1_:msmf::state<>{};
 
         // Set initial state
         typedef State1_ initial_state;
