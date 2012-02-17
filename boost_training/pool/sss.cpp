@@ -45,21 +45,21 @@ struct My {
     int color;
 };
 
-template <class tag, class num_of_obj, class size = std::size_t, >
+template <typename T, std::size_t numOfMaxObj>
 class sss_allocator {
 public:
     typedef std::size_t size_type;
     typedef std::ptrdiff_t difference_type;
 
+	template <typename U>
+	struct rebind {
+		typedef sss_allocator<U, numOfMaxObj> other;
+	};
 	sss_allocator() {
-		sss_.add_block
+		sss_.add_block(buf, sizeof(T), sizeof(T) * numOfMaxObj);
 	}
-    static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes) {
-	}
-
 private:
-	typedef boost::simple_segregated_storage<size> sss_type;
-	static sss_type sss_;
+	unsigned char buf_[sizeof(T) * numOfMaxObj];
 };
 
 template <std::size_t size>
