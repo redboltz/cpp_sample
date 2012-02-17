@@ -15,6 +15,17 @@ struct My {
     int color;
 };
 
+struct My2 {
+    My2() {
+        std::cout << "My2 construct:" << this << std::endl; 
+    }
+    ~My2() { 
+        std::cout << "My2 destruct:" << this << std::endl; 
+    }
+    int x[10];
+    int y;
+    int color;
+};
 
 void test1() {
 	std::size_t const UnitSize = sizeof(My);
@@ -59,6 +70,23 @@ void test1() {
 	void* mpc = sss.malloc();
 	assert(mpc == mp1);
 	assert(sss.empty());
+	
+	std::size_t const UnitSize2 = sizeof(My2);
+	std::size_t const BufSize2 = UnitSize2*2;
+	char buf3[BufSize2];
+	sss.add_block(buf3, BufSize2, UnitSize2);
+	void* mpd = sss.malloc();
+	assert(mpd == buf3 + UnitSize2 * 0);
+	void* mpe = sss.malloc();
+	assert(mpe == buf3 + UnitSize2 * 1);
+	assert(sss.empty());
+	sss.free(mpe);
+	sss.free(mpa);
+	sss.free(mpb);
+	sss.free(mpc);
+	sss.free(mpa);
+	void* mpg = sss.malloc();
+	assert(mpg == mpe);
 }
 
 int main() {
