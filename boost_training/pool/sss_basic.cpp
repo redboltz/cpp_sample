@@ -24,17 +24,41 @@ void test1() {
 	boost::simple_segregated_storage<std::size_t> sss;
 	sss.add_block(buf, BufSize, UnitSize);
 	void* mp1 = sss.malloc();
-	assert(mp1 == buf);
+	assert(mp1 == buf + UnitSize * 0);
 	void* mp2 = sss.malloc();
 	assert(mp2 == buf + UnitSize * 1);
 	void* mp3 = sss.malloc();
 	assert(mp3 == buf + UnitSize * 2);
+	assert(sss.empty());
 	sss.free(mp3);
 	void* mp4 = sss.malloc();
 	assert(mp4 == buf + UnitSize * 2);
 	sss.free(mp2);
 	void* mp5 = sss.malloc();
 	assert(mp5 == buf + UnitSize * 1);
+	assert(sss.empty());
+	char buf2[BufSize];
+	sss.add_block(buf2, BufSize, UnitSize);
+	void* mp6 = sss.malloc();
+	assert(mp6 == buf2 + UnitSize * 0);
+	void* mp7 = sss.malloc();
+	assert(mp7 == buf2 + UnitSize * 1);
+	void* mp8 = sss.malloc();
+	assert(mp8 == buf2 + UnitSize * 2);
+	assert(sss.empty());
+	sss.free(mp1);
+	sss.free(mp2);
+	sss.free(mp7);
+	sss.free(mp6);
+	void* mp9 = sss.malloc();
+	assert(mp9 == mp6);
+	void* mpa = sss.malloc();
+	assert(mpa == mp7);
+	void* mpb = sss.malloc();
+	assert(mpb == mp2);
+	void* mpc = sss.malloc();
+	assert(mpc == mp1);
+	assert(sss.empty());
 }
 
 int main() {
