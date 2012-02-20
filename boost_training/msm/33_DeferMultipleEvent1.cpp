@@ -104,3 +104,12 @@ int main()
 
 // Output:
 //
+// State1::on_entry()
+// > Send Event1
+// > Send Event1
+// > Send Event2
+// State2::on_entry()
+// > Send Event2
+// State3::on_entry()
+// State4::on_entry()
+// State5::on_entry()
