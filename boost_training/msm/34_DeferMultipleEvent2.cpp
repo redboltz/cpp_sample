@@ -72,7 +72,7 @@ namespace {
             msmf::Row < State1, Event2,     State2,     msmf::none,  msmf::none >,
             msmf::Row < State2, msmf::none, State3,     msmf::none,  msmf::none >,
             msmf::Row < State3, Event1,     State4,     msmf::none,  msmf::none >,
-            msmf::Row < State4, Event1,     State5,     msmf::none,  msmf::none >
+            msmf::Row < State2, Event1,     State5,     msmf::none,  msmf::none >
         > {};
     };
 
@@ -98,3 +98,9 @@ int main()
 
 // Output:
 //
+// State1::on_entry()
+// > Send Event1
+// > Send Event2
+// State2::on_entry()
+// State3::on_entry()
+// State4::on_entry()
