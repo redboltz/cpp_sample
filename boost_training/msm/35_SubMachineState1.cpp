@@ -43,37 +43,38 @@ namespace {
             msmf::Row < SubState2, Event1,     Exit1,     msmf::none, msmf::none >
         > {};
     };
-
     // ----- State machine
     struct Sm1_:msmf::state_machine_def<Sm1_>
     {
         // States
-        struct State1:SubState_ 
+        struct State1_:SubState_ 
         {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "State1::on_entry()" << std::endl;
             }
         };
-        struct State2:SubState_ 
+        struct State2_:SubState_ 
         {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "State2::on_entry()" << std::endl;
             }
         };
+        typedef msm::back::state_machine<State1_> State1;
+        typedef msm::back::state_machine<State2_> State2;
 
         // Set initial state
-        typedef State1 initial_state;
+        typedef State1_ initial_state;
         // Transition table
         struct transition_table:mpl::vector<
             //          Start            Event       Next              Action      Guard
             msmf::Row < State1::exit_pt 
-                        <State1::Exit1>, msmf::none, State1::entry_pt
-                                                     <State2::Entry1>, msmf::none, msmf::none >,
+                        <State1_::Exit1>, msmf::none, State2::entry_pt
+                                                     <State2_::Entry1>, msmf::none, msmf::none >,
             msmf::Row < State2::exit_pt 
-                        <State2::Exit1>, msmf::none, State1::entry_pt
-                                                     <State1::Entry1>, msmf::none, msmf::none >
+                        <State2_::Exit1>, msmf::none, State1::entry_pt
+                                                     <State1_::Entry1>, msmf::none, msmf::none >
         > {};
     };
 
