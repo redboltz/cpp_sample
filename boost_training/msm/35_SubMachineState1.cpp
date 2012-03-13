@@ -34,7 +34,7 @@ namespace {
         struct Entry1:msmf::entry_pseudo_state<> {};
         struct Exit1:msmf::exit_pseudo_state<msmf::none> {};
         // Set initial state
-        typedef SubState1 initial_state;
+        typedef mpl::vector<SubState1> initial_state;
         // Transition table
         struct transition_table:mpl::vector<
             //          Start      Event       Next       Action      Guard
@@ -85,6 +85,8 @@ namespace {
     {        
         Sm1 sm1;
         sm1.start(); 
+        std::cout << "> Send Event1" << std::endl;
+        sm1.process_event(Event1());
         std::cout << "> Send Event1" << std::endl;
         sm1.process_event(Event1());
     }
