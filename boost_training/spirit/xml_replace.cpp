@@ -15,10 +15,14 @@ struct xml_replacer
             >> +expr 
             >> qi::char_('"'));
         expr
-            = qi::lit('&') >> expr [qi::_val += "&amp;" + qi::_1]
-         // | qi::lit('"') >> expr [qi::_val += "&quot;" + qi::_1]
-            | qi::lit('<') >> expr [qi::_val += "&lt;" + qi::_1]
-            | qi::lit('>') >> expr [qi::_val += "&gt;" + qi::_1]
+            = qi::lit("&amp;")  >> expr [qi::_val += "&amp;"  + qi::_1]
+            | qi::lit("&quot;") >> expr [qi::_val += "&quot;" + qi::_1]
+            | qi::lit("&lt;")   >> expr [qi::_val += "&lt;"   + qi::_1]
+            | qi::lit("&gt;")   >> expr [qi::_val += "&gt;"   + qi::_1]
+            | qi::lit('&')      >> expr [qi::_val += "&amp;"  + qi::_1]
+         // | qi::lit('"')      >> expr [qi::_val += "&quot;" + qi::_1]
+            | qi::lit('<')      >> expr [qi::_val += "&lt;"   + qi::_1]
+            | qi::lit('>')      >> expr [qi::_val += "&gt;"   + qi::_1]
             | text [qi::_val += qi::_1];
         text %= qi::lexeme[+(qi::char_ - qi::char_("&\"<>"))];
 #if 1
@@ -49,10 +53,10 @@ struct xml_revert_replacer
             >> +expr 
             >> qi::char_('"'));
         expr
-            = qi::lit("&amp;") >> expr [qi::_val += '&' + qi::_1]
+            = qi::lit("&amp;")  >> expr [qi::_val += '&' + qi::_1]
          // | qi::lit("&quot;") >> expr [qi::_val += '"' + qi::_1]
-            | qi::lit("&lt;") >> expr [qi::_val += '<' + qi::_1]
-            | qi::lit("&gt;") >> expr [qi::_val += '>' + qi::_1]
+            | qi::lit("&lt;")   >> expr [qi::_val += '<' + qi::_1]
+            | qi::lit("&gt;")   >> expr [qi::_val += '>' + qi::_1]
             | text [qi::_val += qi::_1];
         text %= qi::lexeme[+(qi::char_ - '&')];
 #if 1
@@ -80,7 +84,7 @@ namespace {
 void test1() {
     xml_replacer<std::string::const_iterator> xr;
     xml_revert_replacer<std::string::const_iterator> xrr;
-    std::string s = "<Tag attr=\"C1&C2>C3\" />";
+    std::string s = "<Tag attr1=\"C1&C2>C3\" attr2=\"C1&C2<C3\"/> <Hoge attr3=\"C&D\">abc</Hoge>";
 
     std::string result1;
     bool rval1 = qi::phrase_parse(
@@ -97,6 +101,14 @@ void test1() {
         xrr,
         qi::ascii::space,
         result2);
+
+    std::string result3;
+    bool rval3 = qi::phrase_parse(
+        result1.begin(), 
+        result1.end(), 
+        xr,
+        qi::ascii::space,
+        result3);
 
 }
 
