@@ -25,6 +25,12 @@ struct Bar {
     boost::optional<Foo&> foo_;
 };
 
+boost::optional<Foo const&> hoge() {
+    boost::optional<Foo&> opref;
+    boost::optional<Foo const&> opcref(opref);
+    return boost::optional<Foo const&>(opref);
+}
+
 int main() {
     boost::optional<Foo&> opref;
     boost::optional<Foo const&> opcref;
@@ -39,5 +45,6 @@ int main() {
 
     opref = f;
     opcref = f;
+    opcref = opref;
 }
 
