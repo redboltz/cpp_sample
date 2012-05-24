@@ -45,10 +45,10 @@ namespace {
                     std::cout << "SubState2::on_entry()" << std::endl;
                 }
             };
-            struct Entry1:msmf::entry_pseudo_state<0> {};
+            struct Entry1:msmf::entry_pseudo_state<> {};
             struct Exit1:msmf::exit_pseudo_state<msmf::none> {};
             // Set initial state
-            typedef SubState1 initial_state;
+            typedef mpl::vector<SubState1> initial_state;
             // Transition table
             struct transition_table:mpl::vector<
                 //          Start      Event       Next       Action      Guard
