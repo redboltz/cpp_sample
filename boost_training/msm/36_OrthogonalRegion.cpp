@@ -10,10 +10,8 @@ namespace {
     namespace msmf = boost::msm::front;
     namespace mpl = boost::mpl;
 
-    // ----- Events
+    // Events
     struct Event1 {};
-    struct Event2 {};
-
     // ----- StateSub
     struct StateSub_:msmf::state_machine_def<StateSub_>
     {
@@ -23,6 +21,10 @@ namespace {
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "SubState1::on_entry()" << std::endl;
             }
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) const {
+                std::cout << "SubState1::on_exit()" << std::endl;
+            }
         };
         struct SubState2:msmf::state<>
         {
@@ -30,51 +32,48 @@ namespace {
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "SubState2::on_entry()" << std::endl;
             }
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) const {
+                std::cout << "SubState2::on_exit()" << std::endl;
+            }
         };
-        struct Entry1:msmf::entry_pseudo_state<> {};
-        struct Exit1:msmf::exit_pseudo_state<msmf::none> {};
         // Set initial state
-        typedef mpl::vector<SubState1> initial_state;
-        // Transition table
-        struct transition_table:mpl::vector<
-            //          Start      Event       Next       Action      Guard
-            msmf::Row < Entry1,    msmf::none, SubState2, msmf::none, msmf::none >,
-            msmf::Row < SubState1, Event1,     Exit1,     msmf::none, msmf::none >,
-            msmf::Row < SubState2, Event1,     Exit1,     msmf::none, msmf::none >
-        > {};
+        typedef mpl::vector<SubState1,SubState2> initial_state;
     };
     // ----- State machine
     struct Sm1_:msmf::state_machine_def<Sm1_>
     {
         // States
-        struct State1_:StateSub_ 
+        struct State1_:msmf::state<>
         {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
                 std::cout << "State1::on_entry()" << std::endl;
+            }
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) const {
+                std::cout << "State1::on_exit()" << std::endl;
             }
         };
         struct State2_:StateSub_ 
         {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
-                std::cout << "State2::on_entry()" << std::endl;
+                std::cout << "State2_::on_entry()" << std::endl;
+            }
+            template <class Event,class Fsm>
+            void on_exit(Event const&, Fsm&) const {
+                std::cout << "State2_::on_exit()" << std::endl;
             }
         };
-        typedef msm::back::state_machine<State1_> State1;
         typedef msm::back::state_machine<State2_> State2;
 
         // Set initial state
-        typedef State1 initial_state;
+        typedef State1_ initial_state;
         // Transition table
         struct transition_table:mpl::vector<
-            //          Start            Event       Next              Action      Guard
-            msmf::Row < State1::exit_pt 
-                        <State1_::Exit1>, msmf::none, State2::entry_pt
-                                                     <State2_::Entry1>, msmf::none, msmf::none >,
-            msmf::Row < State2::exit_pt 
-                        <State2_::Exit1>, msmf::none, State1::entry_pt
-                                                     <State1_::Entry1>, msmf::none, msmf::none >
+            //          Start    Event   Next    Action      Guard
+            msmf::Row < State1_, Event1, State2, msmf::none, msmf::none >
         > {};
     };
 
@@ -85,8 +84,6 @@ namespace {
     {        
         Sm1 sm1;
         sm1.start(); 
-        std::cout << "> Send Event1" << std::endl;
-        sm1.process_event(Event1());
         std::cout << "> Send Event1" << std::endl;
         sm1.process_event(Event1());
     }
@@ -102,7 +99,7 @@ int main()
 //
 // State1::on_entry()
 // > Send Event1
-// > Send Event2
-// State2::on_entry()
-// State3::on_entry()
-// State4::on_entry()
+// State1::on_exit()
+// State2_::on_entry()
+// SubState1::on_entry()
+// SubState2::on_entry()
