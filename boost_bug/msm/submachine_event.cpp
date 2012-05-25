@@ -25,11 +25,14 @@ namespace {
                 void on_entry(Event const&, Fsm&) const {
                     std::cout << "State2_1::on_entry()" << std::endl;
                 }
+            };
+            struct State2_2:msmf::state<> {
                 template <class Event,class Fsm>
-                void on_exit(Event const&, Fsm&) const {
-                    std::cout << "State2_1::on_exit()" << std::endl;
+                void on_entry(Event const&, Fsm&) const {
+                    std::cout << "State2_2::on_entry()" << std::endl;
                 }
             };
+            struct Entry1:msmf::entry_pseudo_state<1> {};
             // Actions
             struct Action1 {
                 template <class Event, class Fsm, class SourceState, class TargetState>
@@ -38,12 +41,21 @@ namespace {
                     std::cout << "Action1()" << std::endl;
                 }
             };
+            struct Action2 {
+                template <class Event, class Fsm, class SourceState, class TargetState>
+                void operator()(Event const&, Fsm&, SourceState&, TargetState&)
+                {
+                    std::cout << "Action2()" << std::endl;
+                }
+            };
             // Set initial state
-            typedef mpl::vector<State2_1> initial_state;
+            typedef mpl::vector<State2_1, State2_2> initial_state;
             // Transition table
             struct transition_table:mpl::vector<
-                //          Start     Event   Next         Action   Guard
-                msmf::Row < State2_1, Event1, msmf::none,  Action1, msmf::none >
+                //          Start     Event       Next        Action      Guard
+                msmf::Row < Entry1,   msmf::none, State2_2,   msmf::none, msmf::none >,
+                msmf::Row < State2_1, Event1,     msmf::none, Action1,    msmf::none >,
+                msmf::Row < State2_2, Event1,     msmf::none, Action2,    msmf::none >
                 > {};
         };
         typedef msm::back::state_machine<State2_> State2;
@@ -52,7 +64,7 @@ namespace {
         typedef State1_ initial_state;
         // Transition table
         struct transition_table:mpl::vector<
-            //          Start    Event   Next    Action      Guard
+            //          Start    Event   Next               Action      Guard
             msmf::Row < State1_, Event1, State2, msmf::none, msmf::none >
         > {};
     };
@@ -77,9 +89,7 @@ int main()
 
 // Output:
 //
-// State1::on_entry()
 // > Send Event1
-// > Send Event2
-// State2::on_entry()
-// State3::on_entry()
-// State4::on_entry()
+// State2_1::on_entry()
+// State2_2::on_entry()
+// Action1()
