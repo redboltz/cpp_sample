@@ -21,7 +21,7 @@ void foo(PV const& pv) {
 	//tmp.push_back(&pv.front());
 	My const &mc1 = pv[0];
 	PV tmp2 = pv;
-	My const &mc2 = tmp2[0];
+	My &mc2 = tmp2[0];
 
 	boost::range::copy(pv, boost::ptr_container::ptr_back_inserter(tmp));
 	//pv[0] = My();
