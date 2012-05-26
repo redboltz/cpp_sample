@@ -50,12 +50,15 @@ struct A {
 private:
     int mem1;
     int mem2;
+    static int smem; // static
 };
+int A::smem = 42; // static
 
 // Tagクラス。アクセスするメンバの、メンバポインタ型を
 // をタイプメンバ type として持つ
 struct A_mem1 { typedef int A::* type; };
 struct A_mem2 { typedef int A::* type; };
+struct A_smem { typedef int* type; };  // static
 
 
 // ------------------------------------------------------
@@ -76,10 +79,12 @@ struct A_mem2 { typedef int A::* type; };
 
 template struct Initializer<A_mem1, &A::mem1>;
 template struct Initializer<A_mem2, &A::mem2>;
+template struct Initializer<A_smem, &A::smem>; // static
 
 int main() {
     A a(1, 2);
     // Accessorを経由して (設定済みの )mem にアクセス
+    std::cout << *Accessor<A_smem>::value << std::endl; // static
     std::cout << a.*Accessor<A_mem1>::value << std::endl;
     std::cout << a.*Accessor<A_mem2>::value << std::endl;
     a.*Accessor<A_mem1>::value = 3;
@@ -91,6 +96,7 @@ int main() {
 }
 // Output:
 /*
+42
 1
 2
 mem1 = 3 mem2 = 4
