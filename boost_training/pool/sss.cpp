@@ -2,6 +2,7 @@
 #include <list>
 
 #include <cstdlib>
+#include <memory>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
@@ -58,13 +59,13 @@ public:
     typedef const value_type * const_pointer;
     typedef value_type & reference;
     typedef const value_type & const_reference;
-
+	static std::size_t const objSize = sizeof(T);
 	template <typename U>
 	struct rebind {
 		typedef sss_allocator<U, numOfMaxObj> other;
 	};
 	sss_allocator() {
-		sss_.add_block(buf_, sizeof(T) * numOfMaxObj, sizeof(T));
+		sss_.add_block(buf_, objSize * numOfMaxObj, objSize);
 	}
     template <typename U>
     sss_allocator(const sss_allocator<U, numOfMaxObj> &) {
@@ -77,14 +78,13 @@ public:
 		return &r;
 	}
     static size_type max_size() { 
-		return sizeof(T) * numOfMaxObj;
+		return objSize * numOfMaxObj;
 	}
     void construct(const pointer ptr, const value_type & t) { 
 		new (ptr) T(t);
 	}
     void destroy(const pointer ptr) { 
-		//! Destroy ptr using destructor.
-		ptr->~T();
+		//ptr->~T();
 		(void) ptr; // Avoid unused variable warning.
     }
 
@@ -97,6 +97,7 @@ public:
 
     static pointer allocate(const size_type n) {
 		pointer p = static_cast<pointer>(sss_.malloc());
+		std::cout << "sizeof<T> = " << sizeof(T) << std::endl;
 		std::cout << "allocate size = " << n << ", addr = " << p << std::endl;
 		if (p == 0)
 			boost::throw_exception(std::bad_alloc());
@@ -112,7 +113,7 @@ public:
 	}
 private:
 	static boost::simple_segregated_storage<std::size_t> sss_;	
-	static unsigned char buf_[sizeof(T) * numOfMaxObj];
+	static unsigned char buf_[objSize * numOfMaxObj];
 };
 
 template <typename T, std::size_t numOfMaxObj>
@@ -120,7 +121,7 @@ boost::simple_segregated_storage<std::size_t>
 sss_allocator<T, numOfMaxObj>::sss_;
 template <typename T, std::size_t numOfMaxObj>
 unsigned char 
-sss_allocator<T, numOfMaxObj>::buf_[sizeof(T) * numOfMaxObj];
+sss_allocator<T, numOfMaxObj>::buf_[objSize * numOfMaxObj];
 
 struct MyTag {};
 
@@ -134,6 +135,8 @@ void test() {
     typedef sss_allocator<My, 100> alloc_type;
 
 	alloc_type a;
+    std::allocator<My> stda;
+
     std::cout << "Start" << std::endl;
     {
 		boost::shared_ptr<My> p1 = boost::allocate_shared<My>(a, 1, 3, 42);
