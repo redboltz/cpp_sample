@@ -65,7 +65,8 @@ namespace {
         // Transition table
         struct transition_table:mpl::vector<
             //          Start    Event   Next               Action      Guard
-            msmf::Row < State1_, Event1, State2, msmf::none, msmf::none >
+            msmf::Row < State1_, Event1, State2::entry_pt
+                                         <State2_::Entry1>, msmf::none, msmf::none >
         > {};
     };
 
