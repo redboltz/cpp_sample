@@ -1,0 +1,20 @@
+Index: back/state_machine.hpp
+===================================================================
+--- back/state_machine.hpp	(revision 78739)
++++ back/state_machine.hpp	(working copy)
+@@ -2526,9 +2526,12 @@
+              // given region starts with the entry pseudo state as active state
+              self->m_states[find_region_id<typename EventType::active_state::wrapped_entry>::region_index] = state_id;
+              self->internal_start(evt.m_event);
+-             // and we process the transition in the zone of the newly active state
+-             // (entry pseudo states are, according to UML, a state connecting 1 transition outside to 1 inside
+-             self->process_event(evt.m_event);
++             if (self->m_events_queue.m_events_queue.empty())
++             {
++                 // and we process the transition in the zone of the newly active state
++                 // (entry pseudo states are, according to UML, a state connecting 1 transition outside to 1 inside
++                 self->process_event(evt.m_event);
++             }
+          }
+      private:
+          // helper for the fork case, does almost like the direct entry
