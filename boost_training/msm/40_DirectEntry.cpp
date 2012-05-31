@@ -11,13 +11,12 @@ namespace {
     namespace mpl = boost::mpl;
 
     // ----- Events
-    struct AnyEvent {};
-    struct StartButtonPressed:AnyEvent {};
+    struct StartButtonPressed {};
     struct CheckSucceeded {};
     struct CheckFailed {};
     struct ScanSucceeded {};
     struct ScanFailed {};
-    struct Completed:AnyEvent {
+    struct Completed {
         enum Result {
             OK,
             NG
@@ -54,7 +53,7 @@ namespace {
                     std::cout << "Scanning..." << std::endl;
                 }
             };
-            struct ScanOnly:msmf::entry_pseudo_state<> {};
+            struct ScanOnly:msmf::state<>, msmf::explicit_entry<> {};
             struct Exit1:msmf::exit_pseudo_state<Completed> {};
 
             // Set initial state
@@ -64,7 +63,7 @@ namespace {
                 //          Start          Event           Next      Action      Guard
                 msmf::Row < AliveChecking, CheckSucceeded, Scanning, msmf::none, msmf::none >,
                 msmf::Row < AliveChecking, CheckFailed,    Exit1,    msmf::none, msmf::none >,
-                msmf::Row < ScanOnly,      AnyEvent,       Scanning, msmf::none, msmf::none >,
+                msmf::Row < ScanOnly,      msmf::none,     Scanning, msmf::none, msmf::none >,
                 msmf::Row < Scanning,      ScanSucceeded,  Exit1,    msmf::none, msmf::none >,
                 msmf::Row < Scanning,      ScanFailed,     Exit1,    msmf::none, msmf::none >
                 > {};
@@ -119,12 +118,12 @@ namespace {
         // Transition table
         struct transition_table:mpl::vector<
             //          Start                    Event               Next                        Action           Guard
-            msmf::Row < Waiting_,                StartButtonPressed, RightScanning::entry_pt
+            msmf::Row < Waiting_,                StartButtonPressed, RightScanning::direct
                                                                      <RightScanning_::ScanOnly>, RightMessage,    msmf::none >,
             msmf::Row < RightScanning::exit_pt
                         <RightScanning_::Exit1>, Completed,          Waiting_,                   FailMessage,     msmf::none >, // else
             msmf::Row < RightScanning::exit_pt
-                        <RightScanning_::Exit1>, Completed,          LeftScanning::entry_pt
+                        <RightScanning_::Exit1>, Completed,          LeftScanning::direct
                                                                      <LeftScanning_::ScanOnly>,  LeftMessage,     IsResultOk >,
             msmf::Row < LeftScanning::exit_pt
                         <LeftScanning_::Exit1>,  Completed,          Waiting_,                   FailMessage,     msmf::none >, // else
