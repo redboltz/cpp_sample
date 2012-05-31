@@ -12,6 +12,8 @@ namespace {
 
     // ----- Events
     struct StartButtonPressed {};
+    struct CheckSucceeded {};
+    struct CheckFailed {};
     struct ScanSucceeded {};
     struct ScanFailed {};
     struct Completed {
@@ -19,6 +21,7 @@ namespace {
             OK,
             NG
         };
+        Completed(CheckFailed const&):r_(NG) {}
         Completed(ScanSucceeded const&):r_(OK) {}
         Completed(ScanFailed const&):r_(NG) {}
         Result result() const { return r_; }
@@ -39,6 +42,12 @@ namespace {
         template <typename Entry1Event>
         struct ScanFinger_:msmf::state_machine_def<ScanFinger_<Entry1Event> >
         {
+            struct AliveChecking:msmf::state<> {
+                template <class Event,class Fsm>
+                void on_entry(Event const&, Fsm&) const {
+                    std::cout << "Alive checking..." << std::endl;
+                }
+            };
             struct Scanning:msmf::state<> {
                 template <class Event,class Fsm>
                 void on_entry(Event const&, Fsm&) const {
@@ -49,13 +58,15 @@ namespace {
             struct Exit1:msmf::exit_pseudo_state<Completed> {};
 
             // Set initial state
-            typedef Scanning initial_state;
+            typedef mpl::vector<AliveChecking> initial_state;
             // Transition table
             struct transition_table:mpl::vector<
-                //          Start     Event          Next      Action      Guard
-                msmf::Row < Entry1,   Entry1Event,   Scanning, msmf::none, msmf::none >,
-                msmf::Row < Scanning, ScanSucceeded, Exit1,    msmf::none, msmf::none >,
-                msmf::Row < Scanning, ScanFailed,    Exit1,    msmf::none, msmf::none >
+                //          Start          Event           Next      Action      Guard
+                msmf::Row < AliveChecking, CheckSucceeded, Scanning, msmf::none, msmf::none >,
+                msmf::Row < AliveChecking, CheckFailed,    Exit1,    msmf::none, msmf::none >,
+                msmf::Row < Entry1,        Entry1Event,    Scanning, msmf::none, msmf::none >,
+                msmf::Row < Scanning,      ScanSucceeded,  Exit1,    msmf::none, msmf::none >,
+                msmf::Row < Scanning,      ScanFailed,     Exit1,    msmf::none, msmf::none >
                 > {};
         };
 
