@@ -4,7 +4,6 @@
 #include <boost/msm/front/state_machine_def.hpp>
 #include <boost/msm/front/functor_row.hpp>
 
-
 namespace {
     namespace msm = boost::msm;
     namespace msmf = boost::msm::front;
@@ -49,20 +48,20 @@ namespace {
             };
             struct Scanning:msmf::state<> {
                 template <class Event,class Fsm>
-                void on_entry(Event const& e, Fsm&) const {
-                    boost::any const& a = e;
+                void on_entry(Event const& e, Fsm&, typename boost::enable_if<boost::is_same<Event, boost::any> >::type* = 0) const {
                     std::cout << "Scanning..." << std::endl;
-                    if (StartButtonPressed const* s = boost::any_cast<StartButtonPressed>(&a)) {
-                        (void)s;
+                    if (boost::any_cast<StartButtonPressed>(&e)) {
                         std::cout << "Incoming event is StartButtonPressed" << std::endl;
                     }
-                    else if (Completed const* c = boost::any_cast<Completed>(&a)) {
+                    else if (Completed const* c = boost::any_cast<Completed>(&e)) {
                         std::cout << "Incoming event is Completed. Parameter is " << c->result() << std::endl;
                     }
                     else {
                         std::cout << "Other event" << std::endl;
                     }
                 }
+                template <class Event,class Fsm>
+                void on_entry(Event const& e, Fsm&, typename boost::disable_if<boost::is_same<Event, boost::any> >::type* = 0) const {}
             };
             struct ScanOnly:msmf::entry_pseudo_state<> {};
             struct Exit1:msmf::exit_pseudo_state<Completed> {};
