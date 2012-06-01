@@ -187,9 +187,11 @@ int main()
 // > Send StartButtonPressed()
 // Right hand please.
 // Scanning...
+// Incoming event is StartButtonPressed
 // > Send ScanSucceeded()
 // Left hand please.
 // Scanning...
+// Incoming event is Completed. Parameter is 0
 // > Send ScanSucceeded()
 // Register Completed.
 // Press Start Button
@@ -197,6 +199,7 @@ int main()
 // > Send StartButtonPressed()
 // Right hand please.
 // Scanning...
+// Incoming event is StartButtonPressed
 // > Send ScanFailed()
 // Register Failed.
 // Press Start Button
@@ -204,9 +207,11 @@ int main()
 // > Send StartButtonPressed()
 // Right hand please.
 // Scanning...
+// Incoming event is StartButtonPressed
 // > Send ScanSucceeded()
 // Left hand please.
 // Scanning...
+// Incoming event is Completed. Parameter is 0
 // > Send ScanFailed()
 // Register Failed.
 // Press Start Button
