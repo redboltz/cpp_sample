@@ -92,3 +92,9 @@ int main()
 
 // Output:
 //
+// State1::on_entry()
+// SubState1::on_entry()
+// > Send Event1()
+// SubState1::on_exit()
+// State1::on_exit()
+// State2::on_entry()
