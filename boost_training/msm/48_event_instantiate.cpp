@@ -42,20 +42,12 @@ namespace {
         };
         struct State4:msmf::state<>
         {
-#if 0
+#if 1
             template <typename Event, typename Fsm>
             void on_entry(Event const&, Fsm const&) {
                 typedef typename boost::mpl::print<Event>::type t;
             }
 #endif
-            template <typename Fsm>
-            void on_entry(Event1 const&, Fsm const&) {
-                //typedef typename boost::mpl::print<Event>::type t;
-            }
-            template <typename Event, typename Fsm>
-            void on_entry(Event const&, Fsm const&) {
-                typedef typename boost::mpl::print<Event>::type t;
-            }
         };
         struct State5:msmf::state<>
         {
@@ -72,7 +64,7 @@ namespace {
             //          Start   Event       Next    Action      Guard
             msmf::Row < State1, Event1,     State4, msmf::none, msmf::none >,
             msmf::Row < State4, msmf::none, State2, msmf::none, msmf::none >,
-            msmf::Row < State2, Event2,     State5, msmf::none, msmf::none >,
+            msmf::Row < State2, Event2,     State4, msmf::none, msmf::none >,
             msmf::Row < State5, msmf::none, State3, msmf::none, msmf::none >,
             msmf::Row < State3, Event3,     State6, msmf::none, msmf::none >
         > {};

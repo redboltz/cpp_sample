@@ -47,8 +47,8 @@ namespace {
                 }
             };
             struct Scanning:msmf::state<> {
-                template <class Event,class Fsm>
-                void on_entry(Event const& e, Fsm&, typename boost::enable_if<boost::is_same<Event, boost::any> >::type* = 0) const {
+                template <class Fsm>
+                void on_entry(boost::any const& e, Fsm&) const {
                     std::cout << "Scanning..." << std::endl;
                     if (boost::any_cast<StartButtonPressed>(&e)) {
                         std::cout << "Incoming event is StartButtonPressed" << std::endl;
@@ -60,8 +60,11 @@ namespace {
                         std::cout << "Other event" << std::endl;
                     }
                 }
-                template <class Event,class Fsm>
-                void on_entry(Event const& e, Fsm&, typename boost::disable_if<boost::is_same<Event, boost::any> >::type* = 0) const {}
+                template <class Fsm>
+                void on_entry(CheckSucceeded const& e, Fsm&) const {}
+
+//                template <class Event,class Fsm>
+//                void on_entry(Event const& e, Fsm&, typename boost::disable_if<boost::is_same<Event, boost::any> >::type* = 0) const {}
             };
             struct ScanOnly:msmf::entry_pseudo_state<> {};
             struct Exit1:msmf::exit_pseudo_state<Completed> {};

@@ -35,19 +35,13 @@ namespace {
                 }
             };
             struct SubState2:msmf::state<> {
-                template <class Event,class Fsm>
-                void on_entry(Event const& e, Fsm&, // ■■変更点■■(トリガイベントを見たいときのみ)
-                              typename boost::enable_if<
-                                  boost::is_same<Event, boost::any>
-                              >::type* = 0) const {
+                template <class Fsm>
+                void on_entry(boost::any const& e, Fsm&) const { // ■■変更点■■(トリガイベントを見たいときのみ)
                     std::cout << "SubState2::on_entry()" << std::endl;
                     if (OuterEvent const* oe = boost::any_cast<OuterEvent>(&e)) oe->foo();
                 }
-                template <class Event,class Fsm>
-                void on_entry(Event const&, Fsm&,   // ■■変更点■■ 他のイベントでも実体化するのでこれが必要
-                              typename boost::disable_if<
-                                  boost::is_same<Event, boost::any>
-                              >::type* = 0) const {}
+                //template <class Event,class Fsm>
+                //void on_entry(/*Event const&, Fsm&*/...) const {}   // ■■変更点■■ 他のイベントでも実体化するのでこれが必要
             };
             struct Entry1:msmf::entry_pseudo_state<> {}; // ■■変更点■■
             struct Exit1:msmf::exit_pseudo_state<msmf::none> {};
