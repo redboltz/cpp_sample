@@ -47,8 +47,8 @@ namespace Atm {
         };
         struct WithdrawAuth:AuthMethod
         {
-            template <class Event,class Fsm>
-            void on_entry(Event const&, Fsm&) const {
+            template <class Event>
+            void on_entry(Event const&, Withdraw_&) const {
                 std::cout << "[DBG] Enter WithdrawAuth" << std::endl;
             }
             template <class Event,class Fsm>
