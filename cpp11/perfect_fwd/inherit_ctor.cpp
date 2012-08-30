@@ -33,8 +33,10 @@ struct Derived2:Base2 {
 };
 
 void test2() {
-    Base2 b2({ 1, 2, 3 });
-    // Derived2 d2({ 1, 2, 3 }); // compile error
+    Base2 b2 { 1, 2, 3 };
+    // Derived2 d2 { 1, 2, 3 }; // compile error
+    auto a {1, 2, 3};
+    Derived2 dd2(a);
 }
 
 struct Base3 {
@@ -69,7 +71,7 @@ struct Derived4:Base4 {
 
 void test4() {
     Base4 b4(Base4::mem);
-    Derived4 d4(Base4::mem); // link error
+    // Derived4 d4(Base4::mem); // link error
 }
 
 struct Base5 {
