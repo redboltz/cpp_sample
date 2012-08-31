@@ -69,11 +69,7 @@ IRCol sub(IRCol c1, IRCol c2) {
             // 2 ->
             if (it1->upper() >  it2->upper()) {
                 // shrink it1's lower to it2's upper positon + 1
-                // This means modify it1's lower.
-                auto it1upper = it1->upper();
-                ++it1; // Adjust insertion point.
-                // it1 points to inserted element.
-                it1 = c1.insert(it1, IR(it2->upper() + 1, it1upper));
+                *it1 = IR(it2->upper() + 1, it1->upper());
             }
             // 1 -->
             // 2 -->
