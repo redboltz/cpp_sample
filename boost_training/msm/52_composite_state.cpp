@@ -12,6 +12,8 @@ namespace {
 
     // ----- Events
     struct Event1 {};
+    struct Event2 {};
+    struct Event3 {};
 
     // ----- State machine
     struct OuterSm_:msmf::state_machine_def<OuterSm_>
@@ -19,44 +21,60 @@ namespace {
         struct State1_:msmf::state_machine_def<State1_>
         {
             template <class Event,class Fsm>
-            void on_entry(Event const&, Fsm& f) const {
+            void on_entry(Event const&, Fsm&) const {
                 BOOST_STATIC_ASSERT((boost::is_convertible<Fsm, OuterSm_>::value));
-                BOOST_STATIC_ASSERT((!boost::is_convertible<Fsm, State1_>::value));
                 std::cout << "State1::on_entry()" << std::endl;
             }
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
+                BOOST_STATIC_ASSERT((boost::is_convertible<Fsm, OuterSm_>::value));
                 std::cout << "State1::on_exit()" << std::endl;
             }
 
             struct SubState1:msmf::state<> {
                 template <class Event,class Fsm>
                 void on_entry(Event const&, Fsm&) const {
+                    BOOST_STATIC_ASSERT((boost::is_convertible<Fsm, State1_>::value));
                     std::cout << "SubState1::on_entry()" << std::endl;
                 }
                 template <class Event,class Fsm>
                 void on_exit(Event const&, Fsm&) const {
+                    BOOST_STATIC_ASSERT((boost::is_convertible<Fsm, State1_>::value));
                     std::cout << "SubState1::on_exit()" << std::endl;
                 }
             };
-            struct Exit1:msmf::exit_pseudo_state<msmf::none> {};
+            struct SubState2:msmf::state<> {
+                template <class Event,class Fsm>
+                void on_entry(Event const&, Fsm&) const {
+                    BOOST_STATIC_ASSERT((boost::is_convertible<Fsm, State1_>::value));
+                    std::cout << "SubState2::on_entry()" << std::endl;
+                }
+                template <class Event,class Fsm>
+                void on_exit(Event const&, Fsm&) const {
+                    BOOST_STATIC_ASSERT((boost::is_convertible<Fsm, State1_>::value));
+                    std::cout << "SubState2::on_exit()" << std::endl;
+                }
+            };
 
             // Set initial state
             typedef mpl::vector<SubState1> initial_state;
             // Transition table
             struct transition_table:mpl::vector<
-                //          Start      Event   Next   Action      Guard
-                msmf::Row < SubState1, Event1, Exit1, msmf::none, msmf::none >
+                //          Start      Event   Next       Action      Guard
+                msmf::Row < SubState1, Event2, SubState2, msmf::none, msmf::none >,
+                msmf::Row < SubState2, Event3, SubState1, msmf::none, msmf::none >
                 > {};
         };
         struct State2:msmf::state<>
         {
             template <class Event,class Fsm>
             void on_entry(Event const&, Fsm&) const {
+                BOOST_STATIC_ASSERT((boost::is_convertible<Fsm, OuterSm_>::value));
                 std::cout << "State2::on_entry()" << std::endl;
             }
             template <class Event,class Fsm>
             void on_exit(Event const&, Fsm&) const {
+                BOOST_STATIC_ASSERT((boost::is_convertible<Fsm, OuterSm_>::value));
                 std::cout << "State2::on_exit()" << std::endl;
             }
         };
@@ -67,9 +85,8 @@ namespace {
         typedef State1 initial_state;
         // Transition table
         struct transition_table:mpl::vector<
-            //          Start             Event       Next    Action      Guard
-            msmf::Row < State1::exit_pt
-                        <State1_::Exit1>, msmf::none, State2, msmf::none, msmf::none >
+            //          Start   Event   Next    Action      Guard
+            msmf::Row < State1, Event1, State2, msmf::none, msmf::none >
         > {};
     };
 
@@ -81,6 +98,8 @@ namespace {
         Osm osm;
         osm.start(); 
 
+        std::cout << "> Send Event2()" << std::endl;
+        osm.process_event(Event2());
         std::cout << "> Send Event1()" << std::endl;
         osm.process_event(Event1());
     }
@@ -91,12 +110,14 @@ int main()
     test();
     return 0;
 }
-
 // Output:
 //
 // State1::on_entry()
 // SubState1::on_entry()
-// > Send Event1()
+// > Send Event2()
 // SubState1::on_exit()
+// SubState2::on_entry()
+// > Send Event1()
+// SubState2::on_exit()
 // State1::on_exit()
 // State2::on_entry()

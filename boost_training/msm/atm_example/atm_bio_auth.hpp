@@ -35,8 +35,8 @@ namespace Atm {
         struct WaitingFinger:msm::front::state<> 
         {
             // Entry action
-            template <class Event,class Fsm>
-            void on_entry(Event const&, Fsm&) const {
+            template <class Event>
+            void on_entry(Event const&, BioAuth_&) const {
                 std::cout << "[DBG] Enter WaitingFinger" << std::endl;
                 std::cout << "Please place your finger on the sensor" << std::endl;
             }
