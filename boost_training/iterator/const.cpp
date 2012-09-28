@@ -52,15 +52,33 @@ private:
 };
 
 template <class T>
-class MyRange {
+class ConstRange {
 public:
     typedef MyIter<typename T::const_iterator> const_iterator;
-    MyRange<T>(T const& t):t_(t) {}
+    typedef typename const_iterator::reference const_reference;
+    ConstRange<T>(T const& t):t_(t) {}
     const_iterator begin() const { return t_.begin(); }
     const_iterator end() const { return t_.end(); }
+    const_reference operator[](std::size_t idx) const { return t_[idx]; }
+    
 private:
     T const& t_;
 };
+
+template <class T>
+ConstRange<T> make_ConstRange(T const& t) {
+    return ConstRange<T>(t);
+};
+
+template <class T>
+void foo(ConstRange<T> const& t) {
+    std::cout << t[0] << std::endl;
+    std::cout << **t.begin() << std::endl;
+    // int *p = t[0];
+    // int *q = *t.begin();
+    //t[0] = 1;
+}
+
 
 int main() {
     namespace range = boost::range;
@@ -84,7 +102,8 @@ int main() {
         std::vector<int *> v1 = assign::list_of(&v[0])(&v[1])(&v[2])(&v[3])(&v[4]);
         std::vector<int *> v2 = assign::list_of(&v[0])(&v[1])(&v[2])(&v[5]);
 
-        MyRange<std::vector<int*> > v3(v2);
+        ConstRange<std::vector<int*> > v3(v2);
+        foo(make_ConstRange(v2));
         std::vector<int *> v4;
         range::set_difference(v1, v2, std::back_inserter(v4));
         BOOST_FOREACH(int* i, v4) {
