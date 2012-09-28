@@ -42,7 +42,6 @@ namespace {
                 std::cout << "SubState2::on_exit()" << std::endl;
             }
         };
-        struct Exit1:msmf::exit_pseudo_state<msmf::none> {};
 
         // Set initial state
         typedef mpl::vector<SubState1> initial_state;
